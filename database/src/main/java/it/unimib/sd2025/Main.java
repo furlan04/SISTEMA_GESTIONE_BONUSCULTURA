@@ -11,6 +11,8 @@ public class Main {
      * Porta di ascolto.
      */
     public static final int PORT = 3030;
+    //database
+    private static Database database = new Database();
 
     /**
      * Avvia il database e l'ascolto di nuove connessioni.
@@ -40,6 +42,10 @@ public class Main {
             this.client = client;
         }
 
+        private boolean validAction(String action) {
+            return action.startsWith("get ") || action.startsWith("set ") || action.startsWith("delete ") || action.equals("exists");
+        }
+
         public void run() {
             try {
                 var out = new PrintWriter(client.getOutputStream(), true);
@@ -48,7 +54,18 @@ public class Main {
                 String inputLine;
 
                 while ((inputLine = in.readLine()) != null) {
-                    if (".".equals(inputLine)) {
+                    if (inputLine.isEmpty()) {
+                        out.println("ERROR: Empty command");
+                        continue;
+                    }
+                    if (validAction(inputLine)) {
+                        try {
+                            String result = database.action(inputLine);
+                            out.println(result);
+                        } catch (Exception e) {
+                            out.println("ERROR: " + e.getMessage());
+                        }
+                    } else if ("END".equals(inputLine)) {
                         out.println("bye");
                         break;
                     }
@@ -76,3 +93,5 @@ public class Main {
         startServer();
     }
 }
+
+
