@@ -24,7 +24,7 @@ public class Database {
                 }
                 
                 // Split the line into key and value
-                String[] parts = line.split(":", 2);
+                String[] parts = line.split(" ", 2);
                 if (parts.length == 2) {
                     String key = parts[0].trim();
                     String value = parts[1].trim();
@@ -39,6 +39,7 @@ public class Database {
     public Database (){
         this.data = new HashMap<String, String>();
         seedDatabase();
+
     }
 
     /**
