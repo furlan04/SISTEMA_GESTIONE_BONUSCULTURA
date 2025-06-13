@@ -26,12 +26,7 @@ public class DatabaseConnection {
             System.err.println("Error connecting to database: " + e.getMessage());
         }
     }
-    
-    private static int currentId = 0;
 
-    public synchronized static int getNextId() {
-            return currentId++;
-    }
     
     public String sendDatabaseCommand(String command) throws IOException {
         out.println(command);
