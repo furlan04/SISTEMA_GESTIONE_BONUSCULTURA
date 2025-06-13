@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Registrazione</title>
+    <link rel="stylesheet" href="registrazione.css" />
+  </head>
+  <body>
+    <h1>Registrazione:</h1>
+    <form id="registrazioneForm">
+      <label for="codiceFiscale">Codice Fiscale:</label>
+      <input
+        type="text"
+        id="codiceFiscale"
+        name="codiceFiscale"
+        required
+        maxlength="16"
+        pattern="[A-Za-z0-9]{16}"
+      /><br />
+
+      <label for="nome">Nome:</label>
+      <input type="text" id="nome" name="nome" required /><br />
+
+      <label for="cognome">Cognome:</label>
+      <input type="text" id="cognome" name="cognome" required /><br />
+
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" required /><br />
+
+      <button type="submit">Registrati</button>
+    </form>
+    <script src="registrazione.js"></script>
+  </body>
+</html>

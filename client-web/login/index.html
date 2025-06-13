@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Login - Bonus Cultura</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="login.css" />
+  </head>
+  <body>
+    <div class="login-container">
+      <h2>Accedi</h2>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="codiceFiscale">Codice Fiscale</label>
+          <input
+            type="text"
+            id="codiceFiscale"
+            name="codiceFiscale"
+            required
+            maxlength="16"
+            pattern="[A-Za-z0-9]{16}"
+            autocomplete="username"
+          />
+        </div>
+        <button type="submit">Login</button>
+      </form>
+      <p>
+        Non hai un account?
+        <a href="../registrazione">Registrati qui</a>
+      </p>
+    </div>
+    <script src="./login.js"></script>
+  </body>
+</html>

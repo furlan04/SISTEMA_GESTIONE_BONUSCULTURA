@@ -1,0 +1,82 @@
+/* Stile moderno per la pagina di login */
+body {
+  background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.login-container {
+  background: #fff;
+  max-width: 350px;
+  margin: 60px auto;
+  padding: 32px 28px 24px 28px;
+  border-radius: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.18);
+  text-align: center;
+}
+
+h2 {
+  margin-bottom: 24px;
+  color: #2d3a4b;
+}
+
+.form-group {
+  margin-bottom: 18px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  color: #2d3a4b;
+  font-weight: 500;
+}
+
+input[type="text"] {
+  width: 100%;
+  padding: 10px 8px;
+  border: 1px solid #b0bec5;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 8px;
+  transition: border-color 0.2s;
+}
+
+input[type="text"]:focus {
+  border-color: #66a6ff;
+  outline: none;
+}
+
+button[type="submit"] {
+  width: 100%;
+  background: #66a6ff;
+  color: #fff;
+  border: none;
+  padding: 12px 0;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+button[type="submit"]:hover {
+  background: #89f7fe;
+  color: #2d3a4b;
+}
+
+p {
+  margin-top: 18px;
+  color: #2d3a4b;
+}
+
+a {
+  color: #66a6ff;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+a:hover {
+  text-decoration: underline;
+}
