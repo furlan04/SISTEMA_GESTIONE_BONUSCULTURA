@@ -10,6 +10,11 @@ public class DatabaseConnection {
     private static final String DB_HOST = "localhost";
     private static final int DB_PORT = 3030;
 
+    private static int currentId = 0;
+
+    public synchronized static int getNextId() {
+            return currentId++;
+    }
     public static String sendDatabaseCommand(String command) throws IOException {
         try (Socket socket = new Socket(DB_HOST, DB_PORT);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);

@@ -76,12 +76,15 @@ public class Database {
 
     public String get(String key) throws Exception {
         if (data.containsKey(key)) {
+            
             return data.get(key);
         } else {
             throw new Exception("Key not found: " + key);
         }
     }
     
+    
+
     public String set(String key, String value){
         if (data.containsKey(key)) {
             String oldValue = data.get(key);
