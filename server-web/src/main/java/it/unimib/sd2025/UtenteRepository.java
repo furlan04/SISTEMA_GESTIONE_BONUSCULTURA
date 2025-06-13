@@ -26,7 +26,7 @@ public class UtenteRepository extends DatabaseConnection {
             return "ERROR: Codice Fiscale, Nome, Cognome and Email cannot be null or empty";
         }
         try{
-            if(existsUtente(cf).startsWith("ERROR")) {
+            if(!existsUtente(cf).equals("false")) {
                 return "ERROR: User with Codice Fiscale " + cf + " already exists";
             }
             sendDatabaseCommand("set utente:" + cf + ":nome " + nome);
@@ -44,7 +44,7 @@ public class UtenteRepository extends DatabaseConnection {
             return "ERROR: Codice Fiscale cannot be null or empty";
         }
 
-        if (existsUtente(cf).startsWith("ERROR")) {
+        if (!existsUtente(cf).equals("false")) {
             return "ERROR: User with Codice Fiscale " + cf + " does not exist";
         }
 

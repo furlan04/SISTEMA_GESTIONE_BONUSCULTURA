@@ -3,11 +3,11 @@ package it.unimib.sd2025;
 import java.sql.Date;
 
 public class Buono {
-    private String id;
-    private double valore;
-    private String tipologia;
-    private Date dataCreazione;
-    private Date dataScadenza;
+    public String id;
+    public double valore;
+    public String tipologia;
+    public Date dataCreazione;
+    public Date dataScadenza;
 
     public Buono(String id, double valore, String tipologia, Date dataCreazione, Date dataScadenza) {
         this.id = id;
