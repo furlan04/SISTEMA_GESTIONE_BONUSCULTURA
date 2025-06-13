@@ -10,13 +10,20 @@ public class Buono {
     public Date dataScadenza;
 
     public Buono(String id, double valore, String tipologia, Date dataCreazione, Date dataScadenza) {
-        this.id = id;
+        this.id = String.valueOf(Id.getNextId());
         this.valore = valore;
         this.tipologia = tipologia;
         this.dataCreazione = dataCreazione;
         this.dataScadenza = dataScadenza;
     }
 
+    public Buono(double valore, String tipologia, Date dataCreazione, Date dataScadenza) {
+        this.id = String.valueOf(Id.getNextId());
+        this.valore = valore;
+        this.tipologia = tipologia;
+        this.dataCreazione = dataCreazione;
+        this.dataScadenza = dataScadenza;
+    }
     public String getId() {
         return id;
     }

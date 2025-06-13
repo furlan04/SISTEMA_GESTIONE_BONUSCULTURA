@@ -51,6 +51,7 @@ public class UtenteRepository extends DatabaseConnection {
         String nome = sendDatabaseCommand("get utente:" + cf + ":nome");
         String cognome = sendDatabaseCommand("get utente:" + cf + ":cognome");
         String email = sendDatabaseCommand("get utente:" + cf + ":email");
+        
 
         if (nome.startsWith("ERROR") || cognome.startsWith("ERROR") || email.startsWith("ERROR")) {
             return "ERROR: User with Codice Fiscale " + cf + " does not exist";
@@ -72,5 +73,55 @@ public class UtenteRepository extends DatabaseConnection {
         sendDatabaseCommand("delete utente:" + cf + ":email");
         String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
         return buoni;
+    }
+    public String addBuonoUtente(String cf, String buonoId) throws IOException {
+        if(cf == null || cf.isEmpty() || buonoId == null || buonoId.isEmpty()) {
+            return "ERROR: Codice Fiscale and Buono ID cannot be null or empty";
+        }
+        if(!existsUtente(cf).equals("true")) {
+            return "ERROR: User with Codice Fiscale " + cf + " does not exist";
+        }
+        String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
+        if(buoni.startsWith("ERROR")) {
+            return "ERROR: Failed to retrieve user's buoni";
+        }
+        if(buoni.contains(buonoId)) {
+            return "ERROR: Buono with ID " + buonoId + " already exists for user with Codice Fiscale " + cf;
+        }
+        sendDatabaseCommand("set utente:" + cf + ":buoni " + buoni + ":" + buonoId);
+        return "SUCCESS";
+    }
+    
+    public String getBuoniUtente(String cf) throws IOException {
+        if(cf == null || cf.isEmpty()) {
+            return "ERROR: Codice Fiscale cannot be null or empty";
+        }
+        if(!existsUtente(cf).equals("true")) {
+            return "ERROR: User with Codice Fiscale " + cf + " does not exist";
+        }
+        String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
+        if(buoni.startsWith("ERROR")) {
+            return "ERROR: Failed to retrieve user's buoni";
+        }
+        return buoni;
+    }
+
+    public String removeBuonoUtente (String cf, String id) throws IOException {
+        if(cf == null || cf.isEmpty() || id == null || id.isEmpty()) {
+            return "ERROR: Codice Fiscale and Buono ID cannot be null or empty";
+        }
+        if(!existsUtente(cf).equals("true")) {
+            return "ERROR: User with Codice Fiscale " + cf + " does not exist";
+        }
+        String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
+        if(buoni.startsWith("ERROR")) {
+            return "ERROR: Failed to retrieve user's buoni";
+        }
+        if(!buoni.contains(id)) {
+            return "ERROR: Buono with ID " + id + " does not exist for user with Codice Fiscale " + cf;
+        }
+        String newBuoni = buoni.replace(":" + id, "").replace(id + ":", "");
+        sendDatabaseCommand("set utente:" + cf + ":buoni " + newBuoni);
+        return "SUCCESS";
     }
 }
