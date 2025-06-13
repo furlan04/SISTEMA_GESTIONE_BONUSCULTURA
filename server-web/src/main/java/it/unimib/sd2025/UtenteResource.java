@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.xml.crypto.Data;
+
 import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -22,9 +25,11 @@ public class UtenteResource {
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserInfo(@PathParam("cf") String cf) {
         try {
-            String userDataNome = DatabaseConnection.sendDatabaseCommand("get utente:" + cf + ":nome");
-            String userDataCognome = DatabaseConnection.sendDatabaseCommand("get utente:" + cf + ":cognome");
-            String userDataEmail = DatabaseConnection.sendDatabaseCommand("get utente:" + cf + ":email");
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            String userDataNome = dbConnection.sendDatabaseCommand("get utente:" + cf + ":nome");
+            String userDataCognome = dbConnection.sendDatabaseCommand("get utente:" + cf + ":cognome");
+            String userDataEmail = dbConnection.sendDatabaseCommand("get utente:" + cf + ":email");
+            dbConnection.close();
 
             Utente user = new Utente(userDataNome, userDataCognome, userDataEmail, cf);
 
@@ -45,9 +50,13 @@ public class UtenteResource {
                 .fromJson(userJson, new HashMap<String, String>(){}.getClass().getGenericSuperclass());
 
             String cf = userData.getCodiceFiscale();
-            DatabaseConnection.sendDatabaseCommand("set utente:" + cf + ":nome " + userData.getNome());
-            DatabaseConnection.sendDatabaseCommand("set utente:" + cf + ":cognome " + userData.getCognome());
-            DatabaseConnection.sendDatabaseCommand("set utente:" + cf + ":email " + userData.getCognome());
+
+            DatabaseConnection dbConnection = new DatabaseConnection();
+            dbConnection.sendDatabaseCommand("set utente:" + cf + ":nome " + userData.getNome());
+            dbConnection.sendDatabaseCommand("set utente:" + cf + ":cognome " + userData.getCognome());
+            dbConnection.sendDatabaseCommand("set utente:" + cf + ":email " + userData.getEmail());
+            dbConnection.sendDatabaseCommand("set utente:" + cf + ":buoni ");
+            dbConnection.close();
 
             return Response.status(Status.CREATED)
                          .entity(userJson)
@@ -63,9 +72,7 @@ public class UtenteResource {
     @Path("/{cf}")
     public Response deleteUser(@PathParam("cf") String cf) {
         try {
-            DatabaseConnection.sendDatabaseCommand("delete utente:" + cf + ":nome");
-            DatabaseConnection.sendDatabaseCommand("delete utente:" + cf + ":cognome");
-            DatabaseConnection.sendDatabaseCommand("delete utente:" + cf + ":email");
+
             
             return Response.status(Status.NO_CONTENT).build();
         } catch (Exception e) {
@@ -83,10 +90,6 @@ public class UtenteResource {
         try {
             Map<String, String> userData = JsonbBuilder.create()
                 .fromJson(userJson, new HashMap<String, String>(){}.getClass().getGenericSuperclass());
-
-            DatabaseConnection.sendDatabaseCommand("set utente:" + cf + ":nome " + userData.get("nome"));
-            DatabaseConnection.sendDatabaseCommand("set utente:" + cf + ":cognome " + userData.get("cognome"));
-            DatabaseConnection.sendDatabaseCommand("set utente:" + cf + ":email " + userData.get("email"));
 
             return Response.ok(userJson).build();
         } catch (Exception e) {

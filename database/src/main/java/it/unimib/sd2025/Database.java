@@ -62,7 +62,7 @@ public class Database {
 
         switch (method.toLowerCase()) {
             case "exists":
-                return data.containsKey(key) ? "true" : "false";
+                return exists(key);
             case "get":
                 return get(key);
             case "set":
@@ -101,5 +101,17 @@ public class Database {
         } else {
             throw new Exception("Key not found: " + key);
         }
+    }
+
+    public String exists(String partial_key) {
+        if(partial_key == null || partial_key.isEmpty()) {
+            return "false";
+        }
+        for (String key : data.keySet()) {
+            if (key.startsWith(partial_key)) {
+                return "true";
+            }
+        }
+        return "false";
     }
 }

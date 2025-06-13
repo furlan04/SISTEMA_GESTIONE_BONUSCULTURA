@@ -43,7 +43,7 @@ public class Main {
         }
 
         private boolean validAction(String action) {
-            return action.startsWith("get ") || action.startsWith("set ") || action.startsWith("delete ") || action.equals("exists");
+            return action.startsWith("get ") || action.startsWith("set ") || action.startsWith("delete ") || action.equals("exists ");
         }
 
         public void run() {
