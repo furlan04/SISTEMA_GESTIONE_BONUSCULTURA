@@ -44,7 +44,7 @@ public class UtenteRepository extends DatabaseConnection {
             return "ERROR: Codice Fiscale cannot be null or empty";
         }
 
-        if (!existsUtente(cf).equals("false")) {
+        if (!existsUtente(cf).equals("true")) {
             return "ERROR: User with Codice Fiscale " + cf + " does not exist";
         }
 
