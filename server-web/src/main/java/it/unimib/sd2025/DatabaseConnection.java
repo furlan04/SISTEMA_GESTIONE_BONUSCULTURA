@@ -10,13 +10,14 @@ public class DatabaseConnection {
     private static final String DB_HOST = "localhost";
     private static final int DB_PORT = 3030;
 
-    protected String sendDatabaseCommand(String command) throws IOException {
+
+    public static String sendDatabaseCommand(String command) throws IOException {
         try (Socket socket = new Socket(DB_HOST, DB_PORT);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+
             out.println(command);
-            String response = in.readLine();
-            return response != null ? response : "ERROR: No response from database";
+            return in.readLine();
         }
     }
 }

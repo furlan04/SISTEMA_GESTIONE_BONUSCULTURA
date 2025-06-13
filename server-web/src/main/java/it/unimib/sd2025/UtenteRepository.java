@@ -25,13 +25,17 @@ public class UtenteRepository extends DatabaseConnection {
         if(cf == null || cf.isEmpty() || nome == null || nome.isEmpty() || cognome == null || cognome.isEmpty() || email == null || email.isEmpty()) {
             return "ERROR: Codice Fiscale, Nome, Cognome and Email cannot be null or empty";
         }
-        if(existsUtente(cf).startsWith("ERROR")) {
-            return "ERROR: User with Codice Fiscale " + cf + " already exists";
+        try{
+            if(existsUtente(cf).startsWith("ERROR")) {
+                return "ERROR: User with Codice Fiscale " + cf + " already exists";
+            }
+            sendDatabaseCommand("set utente:" + cf + ":nome " + nome);
+            sendDatabaseCommand("set utente:" + cf + ":cognome " + cognome);
+            sendDatabaseCommand("set utente:" + cf + ":email " + email);
+            sendDatabaseCommand("set utente:" + cf + ":buoni");
+        } catch (IOException e) {
+            return "ERROR: Failed to create user with Codice Fiscale " + cf + ". " + e.getMessage();
         }
-        sendDatabaseCommand("set utente:" + cf + ":nome " + nome);
-        sendDatabaseCommand("set utente:" + cf + ":cognome " + cognome);
-        sendDatabaseCommand("set utente:" + cf + ":email " + email);
-        sendDatabaseCommand("set utente:" + cf + ":buoni ");
         return "SUCCESS";
     }
 

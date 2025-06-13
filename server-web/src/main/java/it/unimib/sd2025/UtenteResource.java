@@ -37,8 +37,7 @@ public class UtenteResource {
     public Response createUser(String userJson) {
         try {
             Utente userData = JsonbBuilder.create()
-                    .fromJson(userJson, new HashMap<String, String>() {
-                    }.getClass().getGenericSuperclass());
+                    .fromJson(userJson, Utente.class);
 
             UtenteRepository userRepository = new UtenteRepository();
             String response = userRepository.createUtente(userData.getCodiceFiscale(), userData.getNome(), 
