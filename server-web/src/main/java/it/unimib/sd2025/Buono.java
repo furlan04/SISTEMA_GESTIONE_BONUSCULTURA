@@ -7,22 +7,17 @@ public class Buono {
     public double valore;
     public String tipologia;
     public Date dataCreazione;
-    public Date dataScadenza;
+    public Date dataConsumo;
 
-    public Buono(String id, double valore, String tipologia, Date dataCreazione, Date dataScadenza) {
+    public Buono(String id, double valore, String tipologia, Date dataCreazione, Date dataConsumo) {
         this.id = String.valueOf(Id.getNextId());
         this.valore = valore;
         this.tipologia = tipologia;
         this.dataCreazione = dataCreazione;
-        this.dataScadenza = dataScadenza;
+        this.dataConsumo = dataConsumo;
     }
-
-    public Buono(double valore, String tipologia, Date dataCreazione, Date dataScadenza) {
-        this.id = String.valueOf(Id.getNextId());
-        this.valore = valore;
-        this.tipologia = tipologia;
-        this.dataCreazione = dataCreazione;
-        this.dataScadenza = dataScadenza;
+    public Buono() {
+        // Default constructor for JSON deserialization
     }
     public String getId() {
         return id;
@@ -48,10 +43,10 @@ public class Buono {
     public void setDataCreazione(Date dataCreazione) {
         this.dataCreazione = dataCreazione;
     }
-    public Date getDataScadenza() {
-        return dataScadenza;
+    public Date getDataConsumo() {
+        return dataConsumo;
     }
-    public void setDataScadenza(Date dataScadenza) {
-        this.dataScadenza = dataScadenza;
+    public void setDataConsumo(Date dataConsumo) {
+        this.dataConsumo = dataConsumo;
     }
 }
