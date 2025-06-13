@@ -9,15 +9,12 @@ import java.net.Socket;
 public class DatabaseConnection {
     private static final String DB_HOST = "localhost";
     private static final int DB_PORT = 3030;
-    private Socket socket;
-    private PrintWriter out;
-    private BufferedReader in;
 
-    public DatabaseConnection() {
-        // Constructor can be used for initialization if needed
+    protected String sendDatabaseCommand(String command) throws IOException {
         try (Socket socket = new Socket(DB_HOST, DB_PORT);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+<<<<<<< Updated upstream
 
             this.socket = socket;
             this.out = out;
@@ -41,6 +38,11 @@ public class DatabaseConnection {
             if (socket != null && !socket.isClosed()) socket.close();
         } catch (IOException e) {
             System.err.println("Error closing database connection: " + e.getMessage());
+=======
+            out.println(command);
+            String response = in.readLine();
+            return response != null ? response : "ERROR: No response from database";
+>>>>>>> Stashed changes
         }
     }
 }

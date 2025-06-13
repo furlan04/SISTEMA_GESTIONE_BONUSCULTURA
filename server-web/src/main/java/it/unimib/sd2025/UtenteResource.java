@@ -4,12 +4,6 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.xml.crypto.Data;
-
-import java.io.PrintWriter;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -18,26 +12,22 @@ import jakarta.json.bind.JsonbBuilder;
 
 @Path("utente")
 public class UtenteResource {
-  
 
     @GET
     @Path("/{cf}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getUserInfo(@PathParam("cf") String cf) {
         try {
-            DatabaseConnection dbConnection = new DatabaseConnection();
-            String userDataNome = dbConnection.sendDatabaseCommand("get utente:" + cf + ":nome");
-            String userDataCognome = dbConnection.sendDatabaseCommand("get utente:" + cf + ":cognome");
-            String userDataEmail = dbConnection.sendDatabaseCommand("get utente:" + cf + ":email");
-            dbConnection.close();
+            UtenteRepository userRepository = new UtenteRepository();
+            String json = userRepository.getUtente(cf);
 
-            Utente user = new Utente(userDataNome, userDataCognome, userDataEmail, cf);
+            System.out.println("User info retrieved: " + json);
 
-            return Response.ok(JsonbBuilder.create().toJson(user)).build();
+            return Response.ok(json).build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                         .entity("User not found: " + cf)
-                         .build();
+                    .entity("User not found: ")
+                    .build();
         }
     }
 
@@ -47,24 +37,26 @@ public class UtenteResource {
     public Response createUser(String userJson) {
         try {
             Utente userData = JsonbBuilder.create()
-                .fromJson(userJson, new HashMap<String, String>(){}.getClass().getGenericSuperclass());
+                    .fromJson(userJson, new HashMap<String, String>() {
+                    }.getClass().getGenericSuperclass());
 
-            String cf = userData.getCodiceFiscale();
+            UtenteRepository userRepository = new UtenteRepository();
+            String response = userRepository.createUtente(userData.getCodiceFiscale(), userData.getNome(), 
+                userData.getCognome(), userData.getEmail());
 
-            DatabaseConnection dbConnection = new DatabaseConnection();
-            dbConnection.sendDatabaseCommand("set utente:" + cf + ":nome " + userData.getNome());
-            dbConnection.sendDatabaseCommand("set utente:" + cf + ":cognome " + userData.getCognome());
-            dbConnection.sendDatabaseCommand("set utente:" + cf + ":email " + userData.getEmail());
-            dbConnection.sendDatabaseCommand("set utente:" + cf + ":buoni ");
-            dbConnection.close();
+            if (response.startsWith("ERROR")) {
+                return Response.status(Status.BAD_REQUEST)
+                        .entity(response)
+                        .build();
+            }
 
             return Response.status(Status.CREATED)
-                         .entity(userJson)
-                         .build();
+                    .entity(userJson)
+                    .build();
         } catch (Exception e) {
             return Response.status(Status.BAD_REQUEST)
-                         .entity("Invalid user data")
-                         .build();
+                    .entity("Invalid user data")
+                    .build();
         }
     }
 
@@ -72,30 +64,53 @@ public class UtenteResource {
     @Path("/{cf}")
     public Response deleteUser(@PathParam("cf") String cf) {
         try {
+            UtenteRepository userRepository = new UtenteRepository();
+            String response = userRepository.deleteUtente(cf);
 
-            
+            if (response.startsWith("ERROR")) {
+                return Response.status(Status.NOT_FOUND)
+                        .entity(response)
+                        .build();
+            }
+
+            String[] parts = response.split(":");
+
+            if (parts.length > 0) {
+                BuonoRepository buonoRepository = new BuonoRepository();
+                for (String buonoId : parts) {
+                    if (!buonoId.isEmpty()) {
+                        buonoRepository.deleteBuono(buonoId);
+                    }
+                }
+            }
+
             return Response.status(Status.NO_CONTENT).build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                         .entity("User not found: " + cf)
-                         .build();
+                    .entity("User not found: " + cf)
+                    .build();
         }
     }
-
-    @PUT
-    @Path("/{cf}")
-    @Consumes(MediaType.APPLICATION_JSON)
-    @Produces(MediaType.APPLICATION_JSON)
-    public Response updateUser(@PathParam("cf") String cf, String userJson) {
-        try {
-            Map<String, String> userData = JsonbBuilder.create()
-                .fromJson(userJson, new HashMap<String, String>(){}.getClass().getGenericSuperclass());
-
-            return Response.ok(userJson).build();
-        } catch (Exception e) {
-            return Response.status(Status.BAD_REQUEST)
-                         .entity("Invalid user data")
-                         .build();
-        }
-    }
+    /*
+     * @PUT
+     * 
+     * @Path("/{cf}")
+     * 
+     * @Consumes(MediaType.APPLICATION_JSON)
+     * 
+     * @Produces(MediaType.APPLICATION_JSON)
+     * public Response updateUser(@PathParam("cf") String cf, String userJson) {
+     * try {
+     * Map<String, String> userData = JsonbBuilder.create()
+     * .fromJson(userJson, new HashMap<String,
+     * String>(){}.getClass().getGenericSuperclass());
+     * 
+     * return Response.ok(userJson).build();
+     * } catch (Exception e) {
+     * return Response.status(Status.BAD_REQUEST)
+     * .entity("Invalid user data")
+     * .build();
+     * }
+     * }
+     */
 }

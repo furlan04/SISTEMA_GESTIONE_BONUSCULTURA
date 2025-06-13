@@ -57,9 +57,12 @@ public class Database {
         String key = command.split(" ")[1];
         String value = "";
         if(method.equals("set")){
-            value = command.split(" ")[2];
+            if (command.split(" ").length < 2) {
+                value = "";
+            } else {
+                value = command.split(" ")[2];
+            }
         }
-
         switch (method.toLowerCase()) {
             case "exists":
                 return exists(key);
