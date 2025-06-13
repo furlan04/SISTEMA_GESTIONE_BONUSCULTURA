@@ -13,11 +13,12 @@ public class DatabaseConnection {
     private PrintWriter out;
     private BufferedReader in;
 
-    public static String sendDatabaseCommand(String command) throws IOException {
+    public DatabaseConnection() {
+        // Constructor can be used for initialization if needed
         try (Socket socket = new Socket(DB_HOST, DB_PORT);
                 PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
                 BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
-            
+
             this.socket = socket;
             this.out = out;
             this.in = in;
@@ -25,7 +26,13 @@ public class DatabaseConnection {
             System.err.println("Error connecting to database: " + e.getMessage());
         }
     }
+    
+    private static int currentId = 0;
 
+    public synchronized static int getNextId() {
+            return currentId++;
+    }
+    
     public String sendDatabaseCommand(String command) throws IOException {
         out.println(command);
         String response = in.readLine();
