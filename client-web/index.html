@@ -1,20 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
-    <title>Example page</title>
-  </head>
-  <body data-server-no-reload>
-    <h2>Hello World!</h2>
+    <meta charset="UTF-8">
+    <title>Redirecting...</title>
     <script>
-      const API_URI = "http://localhost:8080";
-
-      window.onload = init();
-
-      async function init() {
-        // Iniziare qui.
-      }
-
+      window.location.replace("./home");
     </script>
+  </head>
+  <body>
+    <p>If you are not redirected automatically, <a href="./home">click here</a>.</p>
   </body>
-
 </html>
