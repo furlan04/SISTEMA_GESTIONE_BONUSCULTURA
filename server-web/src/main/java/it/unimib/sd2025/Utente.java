@@ -2,13 +2,13 @@ package it.unimib.sd2025;
 
 
 public class Utente {
-    public String Nome;
+    public String nome;
     
-    public String Cognome;
+    public String cognome;
     
-    public String Email;
+    public String email;
     
-    public String CodiceFiscale;
+    public String codiceFiscale;
 
     // Costruttore vuoto OBBLIGATORIO per JSON parsing
     public Utente() {
@@ -16,52 +16,52 @@ public class Utente {
 
     // Costruttore con parametri
     public Utente(String nome, String cognome, String email, String codiceFiscale) {
-        this.Nome = nome;
-        this.Cognome = cognome;
-        this.Email = email;
-        this.CodiceFiscale = codiceFiscale;
+        this.nome = nome;
+        this.cognome = cognome;
+        this.email = email;
+        this.codiceFiscale = codiceFiscale;
     }
 
     // Getter e setter
     public String getNome() {
-        return Nome;
+        return nome;
     }
     
     public void setNome(String nome) {
-        this.Nome = nome;
+        this.nome = nome;
     }
     
     public String getCognome() {
-        return Cognome;
+        return cognome;
     }
 
     public void setCognome(String cognome) {
-        this.Cognome = cognome;
+        this.cognome = cognome;
     }
     
     public String getEmail() {
-        return Email;
+        return email;
     }
     
     public void setEmail(String email) {
-        this.Email = email;
+        this.email = email;
     }
     
     public String getCodiceFiscale() {
-        return CodiceFiscale;
+        return codiceFiscale;
     }
     
     public void setCodiceFiscale(String codiceFiscale) {
-        this.CodiceFiscale = codiceFiscale;
+        this.codiceFiscale = codiceFiscale;
     }
 
     @Override
     public String toString() {
         return "Utente{" +
-                "Nome='" + Nome + '\'' +
-                ", Cognome='" + Cognome + '\'' +
-                ", Email='" + Email + '\'' +
-                ", CodiceFiscale='" + CodiceFiscale + '\'' +
+                "Nome='" + nome + '\'' +
+                ", Cognome='" + cognome + '\'' +
+                ", Email='" + email + '\'' +
+                ", CodiceFiscale='" + codiceFiscale + '\'' +
                 '}';
     }
 }
