@@ -1,0 +1,186 @@
+body {
+  background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
+  font-family: "Segoe UI", Arial, sans-serif;
+  margin: 0;
+  min-height: 100vh;
+}
+
+.main-container {
+  max-width: 900px;
+  margin: 40px auto;
+  padding: 20px;
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  text-align: center;
+}
+
+.buono {
+  padding: 20px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border: 1px solid #dee2e6;
+  margin-bottom: 20px;
+}
+
+.buono h3 {
+  color: #2d3a4b;
+  margin-bottom: 20px;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+.buono p {
+  color: #495057;
+  margin: 12px 0;
+  font-size: 1.1rem;
+}
+
+.button-group {
+  margin-top: 30px;
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Bottone Torna ai Buoni - Stile moderno */
+.button-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #6c757d 0%, #495057 100%);
+  color: white;
+  text-decoration: none;
+  border-radius: 25px;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(108, 117, 125, 0.3);
+  border: none;
+  cursor: pointer;
+}
+
+.button-back:hover {
+  background: linear-gradient(135deg, #5a6268 0%, #343a40 100%);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(108, 117, 125, 0.4);
+}
+
+.button-back:active {
+  transform: translateY(0);
+  box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+}
+
+/* Bottone Consuma Buono - Stile accattivante */
+.button-consume {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 15px 30px;
+  background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+  color: white;
+  border: none;
+  border-radius: 25px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+  margin: 15px 0;
+}
+
+.button-consume:hover:not(:disabled) {
+  background: linear-gradient(135deg, #218838 0%, #1e7e34 100%);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(40, 167, 69, 0.4);
+}
+
+.button-consume:active:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(40, 167, 69, 0.3);
+}
+
+.button-consume:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
+}
+
+/* Icone nei bottoni */
+.button-icon {
+  font-size: 1.2rem;
+  display: inline-block;
+}
+
+/* Animazione per il bottone che carica */
+.button-consume:disabled .button-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Messaggi di errore e successo */
+.error-message {
+  padding: 20px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #f8d7da;
+}
+
+.success-message {
+  animation: slideIn 0.3s ease-out;
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+h2 {
+  color: #2d3a4b;
+  margin-bottom: 16px;
+}
+
+p {
+  color: #455a64;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .main-container {
+    margin: 20px 15px;
+    padding: 15px;
+  }
+  
+  .button-group {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .button-back,
+  .button-consume {
+    width: 100%;
+    max-width: 300px;
+    justify-content: center;
+  }
+  
+  .buono {
+    padding: 15px;
+  }
+  
+  .buono h3 {
+    font-size: 1.5rem;
+  }
+}

@@ -1,7 +1,7 @@
 package it.unimib.sd2025;
 
 public class Id {
-    private static int currentId = 0;
+    private static int currentId = 10;
     private static Object _lock = new Object();
 
     private Id() {

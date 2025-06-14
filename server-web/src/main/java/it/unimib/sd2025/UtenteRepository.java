@@ -130,4 +130,27 @@ public class UtenteRepository extends DatabaseConnection {
         sendDatabaseCommand("set utente:" + cf + ":buoni " + newBuoni);
         return "SUCCESS";
     }
+
+    public String getSaldoRimastoUtente(String cf) throws IOException {
+        if(cf == null || cf.isEmpty()) {
+            return "ERROR: Codice Fiscale cannot be null or empty";
+        }
+        if(!existsUtente(cf).equals("true")) {
+            return "ERROR: User with Codice Fiscale " + cf + " does not exist";
+        }
+        String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
+        if(buoni.startsWith("ERROR")) {
+            return "ERROR: Failed to retrieve user's buoni";
+        }
+        double saldoRimasto = 0.0;
+        for(String id : buoni.split(":")) {
+            String saldo = sendDatabaseCommand("get buono:" + id + ":valore");
+            if(saldo.startsWith("ERROR")) {
+                return "ERROR: Failed to retrieve saldo for buono with ID " + id;
+            }
+            saldoRimasto += Double.parseDouble(saldo);
+        }
+        SaldoRimasto saldo = new SaldoRimasto(500 - saldoRimasto);
+        return JsonbBuilder.create().toJson(saldo);
+    }
 }

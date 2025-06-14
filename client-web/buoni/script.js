@@ -34,9 +34,9 @@ function mostraBuoni(buoni) {
     div.innerHTML = `
       <h3>${capitalize(buono.tipologia)}</h3>
       <p><strong>Data Creazione:</strong> ${formatDate(buono.dataCreazione)}</p>
-      <p><strong>Data Consumo:</strong> ${formatDate(buono.dataConsumo)}</p>
+      <p><strong>Data Consumo:</strong> ${buono.dataConsumo ? formatDate(buono.dataConsumo) : "Buono non consumato"}</p>
       <p><strong>Valore:</strong> €${buono.valore.toFixed(2)}</p>
-      <a href="../buono/${buono.id}" class="button">Visualizza Dettagli</a>
+      <a href="../buono/?id=${buono.id}" class="button">Visualizza Dettagli</a>
     `;
     lista.appendChild(div);
   });

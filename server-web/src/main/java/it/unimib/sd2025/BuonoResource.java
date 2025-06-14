@@ -1,7 +1,7 @@
 package it.unimib.sd2025;
 
 import java.io.IOException;
-
+import java.sql.Date;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -49,7 +49,7 @@ public class BuonoResource {
         UtenteRepository userRepository = new UtenteRepository();
         BuonoRepository buonoRepository = new BuonoRepository();
 
-        try{
+        try {
             String userCheck = userRepository.existsUtente(cf);
             if (userCheck.startsWith("ERROR")) {
                 return Response.status(Status.BAD_REQUEST)
@@ -64,21 +64,32 @@ public class BuonoResource {
         }
         String new_id = String.valueOf(Id.getNextId());
         try {
+            SaldoRimasto sr = JsonbBuilder.create().fromJson(userRepository.getSaldoRimastoUtente(cf),
+                    SaldoRimasto.class);
+            if (buonoData.getValore() <= 0 || sr.getSaldo() < buonoData.getValore()) {
+                return Response.status(Status.BAD_REQUEST)
+                        .entity("Buono value must be greater than zero or exceeds user's remaining balance")
+                        .build();
+            }
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST)
+                    .entity("Failed to retrieve user's remaining balance: " + e.getMessage())
+                    .build();
+        }
+        try {
             String create_response = buonoRepository.createBuono(
                     new_id,
                     buonoData.getValore(),
                     buonoData.getTipologia(),
-                    buonoData.getDataCreazione().toString(),
-                    buonoData.getDataConsumo().toString());
+                    (new Date(System.currentTimeMillis())).toString());
 
-            while (create_response.startsWith("ERROR: Buono with ID")){
+            while (create_response.startsWith("ERROR: Buono with ID")) {
                 new_id = String.valueOf(Id.getNextId());
                 create_response = buonoRepository.createBuono(
                         new_id,
                         buonoData.getValore(),
                         buonoData.getTipologia(),
-                        buonoData.getDataCreazione().toString(),
-                        buonoData.getDataConsumo().toString());
+                        (new Date(System.currentTimeMillis())).toString());
             }
             if (create_response.startsWith("ERROR")) {
                 return Response.status(Status.BAD_REQUEST)
@@ -95,7 +106,7 @@ public class BuonoResource {
             if (add_response.startsWith("ERROR")) {
                 return Response.status(Status.BAD_REQUEST)
                         .entity("ADDITION " + add_response)
-                        .build();   
+                        .build();
             }
         } catch (Exception e2) {
             return Response.status(Status.BAD_REQUEST)
@@ -110,7 +121,6 @@ public class BuonoResource {
                 .build();
     }
 
-    
     @DELETE
     @Path("/{cf}/{id}")
     public Response deleteBuono(@PathParam("id") String id, @PathParam("cf") String cf) {
@@ -130,8 +140,8 @@ public class BuonoResource {
             }
             if (userRepository.removeBuonoUtente(cf, id).startsWith("ERROR")) {
                 return Response.status(Status.BAD_REQUEST)
-                    .entity("Failed to remove Buono from user")
-                    .build();
+                        .entity("Failed to remove Buono from user")
+                        .build();
             }
             String create_response = buonoRepository.deleteBuono(id);
             if (create_response.startsWith("ERROR")) {

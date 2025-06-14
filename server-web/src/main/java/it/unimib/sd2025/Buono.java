@@ -6,8 +6,8 @@ public class Buono {
     public String id;
     public double valore;
     public String tipologia;
-    public Date dataCreazione;
-    public Date dataConsumo;
+    public Date dataCreazione = new Date(System.currentTimeMillis());
+    public Date dataConsumo = null;
 
     public Buono(double valore, String tipologia, Date dataCreazione, Date dataConsumo) {
         this.id = String.valueOf(Id.getNextId());

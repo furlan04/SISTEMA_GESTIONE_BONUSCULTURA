@@ -3,7 +3,9 @@ package it.unimib.sd2025;
 import java.io.IOException;
 import java.sql.Date;
 
+import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbConfig;
 
 public class BuonoRepository extends DatabaseConnection {
     public BuonoRepository() {
@@ -21,7 +23,7 @@ public class BuonoRepository extends DatabaseConnection {
         return response;
     }
 
-    public String createBuono(String id, double valore, String tipologia, String dataCreazione, String dataConsumo)
+    public String createBuono(String id, double valore, String tipologia, String dataCreazione)
             throws IOException {
         if (id == null || id.isEmpty() || tipologia == null || tipologia.isEmpty() || dataCreazione == null
                 || dataCreazione.isEmpty()) {
@@ -34,7 +36,7 @@ public class BuonoRepository extends DatabaseConnection {
             sendDatabaseCommand("set buono:" + id + ":valore " + valore);
             sendDatabaseCommand("set buono:" + id + ":tipologia " + tipologia);
             sendDatabaseCommand("set buono:" + id + ":dataCreazione " + dataCreazione);
-            sendDatabaseCommand("set buono:" + id + ":dataConsumo " + dataConsumo);
+            sendDatabaseCommand("set buono:" + id + ":dataConsumo ");
         } catch (IOException e) {
             return "ERROR: Failed to create Buono with ID " + id + ". " + e.getMessage();
         }
@@ -64,11 +66,20 @@ public class BuonoRepository extends DatabaseConnection {
         try {
             double valore = Double.parseDouble(valoreStr);
             Date dataCreazione = Date.valueOf(dataCreazioneStr);
-            Date dataScadenza = Date.valueOf(dataScadenzaStr);
+            Date dataScadenza = null;
+            try {
+                dataScadenza = Date.valueOf(dataScadenzaStr);
+            } catch (IllegalArgumentException e) {
+                // Se la data di scadenza non è valida, impostala a null
+            }
 
             Buono buono = new Buono(id, valore, tipologia, dataCreazione, dataScadenza);
 
-            return JsonbBuilder.create().toJson(buono);
+            JsonbConfig config = new JsonbConfig()
+                    .withNullValues(true);
+
+            Jsonb jsonb = JsonbBuilder.create(config);
+            return jsonb.toJson(buono);
         } catch (IllegalArgumentException e) {
             return "ERROR: Invalid data format for Buono with ID " + id;
         }
