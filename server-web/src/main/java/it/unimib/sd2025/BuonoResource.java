@@ -62,17 +62,27 @@ public class BuonoResource {
                     .entity("Invalid user data format")
                     .build();
         }
+        String new_id = String.valueOf(Id.getNextId());
         try {
-            String response = buonoRepository.createBuono(
-                    buonoData.getId(),
+            String create_response = buonoRepository.createBuono(
+                    new_id,
                     buonoData.getValore(),
                     buonoData.getTipologia(),
                     buonoData.getDataCreazione().toString(),
                     buonoData.getDataConsumo().toString());
 
-            if (response.startsWith("ERROR")) {
+            while (create_response.startsWith("ERROR: Buono with ID")){
+                new_id = String.valueOf(Id.getNextId());
+                create_response = buonoRepository.createBuono(
+                        new_id,
+                        buonoData.getValore(),
+                        buonoData.getTipologia(),
+                        buonoData.getDataCreazione().toString(),
+                        buonoData.getDataConsumo().toString());
+            }
+            if (create_response.startsWith("ERROR")) {
                 return Response.status(Status.BAD_REQUEST)
-                        .entity(response)
+                        .entity("CREATION " + create_response)
                         .build();
             }
         } catch (IOException e1) {
@@ -81,10 +91,11 @@ public class BuonoResource {
                     .build();
         }
         try {
-            if (userRepository.addBuonoUtente(cf, buonoData.getId()).startsWith("ERROR")) {
+            String add_response = userRepository.addBuonoUtente(cf, new_id);
+            if (add_response.startsWith("ERROR")) {
                 return Response.status(Status.BAD_REQUEST)
-                        .entity("Failed to add Buono to user")
-                        .build();
+                        .entity("ADDITION " + add_response)
+                        .build();   
             }
         } catch (Exception e2) {
             return Response.status(Status.BAD_REQUEST)
@@ -92,6 +103,8 @@ public class BuonoResource {
                     .build();
         }
 
+        buonoData.setId(new_id);
+        buonoJson = JsonbBuilder.create().toJson(buonoData);
         return Response.status(Status.CREATED)
                 .entity(buonoJson)
                 .build();
@@ -120,14 +133,14 @@ public class BuonoResource {
                     .entity("Failed to remove Buono from user")
                     .build();
             }
-            String response = buonoRepository.deleteBuono(id);
-            if (response.startsWith("ERROR")) {
+            String create_response = buonoRepository.deleteBuono(id);
+            if (create_response.startsWith("ERROR")) {
                 return Response.status(Status.NOT_FOUND)
-                        .entity(response)
+                        .entity(create_response)
                         .build();
             }
 
-            return Response.ok(response).build();
+            return Response.ok(create_response).build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity("Buono not found: " + id)

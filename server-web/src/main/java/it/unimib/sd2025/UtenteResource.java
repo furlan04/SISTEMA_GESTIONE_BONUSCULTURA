@@ -26,6 +26,7 @@ public class UtenteResource {
                     .build();
         }
     }
+   
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)

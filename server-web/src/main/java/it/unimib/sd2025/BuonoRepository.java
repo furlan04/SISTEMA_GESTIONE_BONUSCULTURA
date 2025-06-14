@@ -14,7 +14,7 @@ public class BuonoRepository extends DatabaseConnection {
         if (id == null || id.isEmpty()) {
             return "ERROR: ID cannot be null or empty";
         }
-        String response = sendDatabaseCommand("exists buono:" + id);
+        String response = sendDatabaseCommand("exists buono:" + id + ":");
         if (response.startsWith("ERROR")) {
             return "ERROR: Buono with ID " + id + " does not exist";
         }

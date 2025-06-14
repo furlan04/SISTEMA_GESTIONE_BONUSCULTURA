@@ -56,12 +56,8 @@ public class Database {
         String method = command.split(" ")[0];
         String key = command.split(" ")[1];
         String value = "";
-        if(method.equals("set")){
-            if (command.split(" ").length < 2) {
-                value = "";
-            } else {
-                value = command.split(" ")[2];
-            }
+        if(command.split(" ").length > 2) {
+            value = command.split(" ")[2];
         }
         switch (method.toLowerCase()) {
             case "exists":
@@ -77,9 +73,10 @@ public class Database {
         }
     }
 
+
     public String get(String key) throws Exception {
+       
         if (data.containsKey(key)) {
-            
             return data.get(key);
         } else {
             throw new Exception("Key not found: " + key);
