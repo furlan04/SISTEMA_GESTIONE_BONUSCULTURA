@@ -95,9 +95,28 @@ public class BuonoRepository extends DatabaseConnection {
         String valore = sendDatabaseCommand("delete buono:" + id + ":valore");
         String tipologia = sendDatabaseCommand("delete buono:" + id + ":tipologia");
         String dataCreazione = sendDatabaseCommand("delete buono:" + id + ":dataCreazione");
-        String dataScadenza = sendDatabaseCommand("delete buono:" + id + ":dataConsumo");
+        sendDatabaseCommand("delete buono:" + id + ":dataConsumo");
         Buono buono = new Buono(id, Double.parseDouble(valore), tipologia, Date.valueOf(dataCreazione),
-                Date.valueOf(dataScadenza));
-        return JsonbBuilder.create().toJson(buono);
+                null);
+        JsonbConfig config = new JsonbConfig()
+                .withNullValues(true);
+
+        Jsonb jsonb = JsonbBuilder.create(config);
+        return jsonb.toJson(buono);
+    }
+
+    public String consumaBuono(String id) throws IOException {
+        if (id == null || id.isEmpty()) {
+            return "ERROR: ID cannot be null or empty";
+        }
+        if (existsBuono(id).equals("false")) {
+            return "ERROR: Buono with ID " + id + " does not exist";
+        }
+        if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
+            return "ERROR: Buono with ID " + id + " has already been consumed";
+        }
+        String dataConsumo = new Date(System.currentTimeMillis()).toString();
+        sendDatabaseCommand("set buono:" + id + ":dataConsumo " + dataConsumo);
+        return "SUCCESS: Buono with ID " + id + " consumed on " + dataConsumo;
     }
 }

@@ -87,19 +87,16 @@ function consumaBuono(buonoId) {
   btn.disabled = true;
   btn.innerHTML = `<span class="button-icon">⏳</span> Consumando...`;
 
-  const url = `http://localhost:8080/buono/${encodeURIComponent(buonoId)}/consuma`;
+  const url = `http://localhost:8080/consuma-buono/${encodeURIComponent(buonoId)}`;
   
   fetch(url, {
-    method: 'POST',
+    method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      codiceFiscale: cf
-    })
   })
   .then(response => {
-    if (!response.ok) throw new Error("Errore durante il consumo del buono");
+    if (!response.ok) throw new Error(response.text());
     return response.json();
   })
   .then(data => {

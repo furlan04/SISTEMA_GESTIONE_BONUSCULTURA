@@ -25,7 +25,9 @@ public class BuonoResource {
             String json = buonoRepository.getBuono(id);
             System.out.println("User info retrieved: " + json);
 
-            return Response.ok(json).build();
+            return Response.ok(json)
+               .type(MediaType.APPLICATION_JSON)
+               .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity("Buono not found: ")
@@ -150,7 +152,9 @@ public class BuonoResource {
                         .build();
             }
 
-            return Response.ok(create_response).build();
+            return Response.ok(create_response)
+               .type(MediaType.APPLICATION_JSON)
+               .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity("Buono not found: " + id)
