@@ -1,6 +1,8 @@
 package it.unimib.sd2025;
 
+import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -18,6 +20,8 @@ public class BuoniResource {
         try {
             UtenteRepository utenteRepo = new UtenteRepository();
             String buoni = utenteRepo.getBuoniUtente(cf);
+
+            System.out.println("Buoni retrieved for user " + cf + ": " + buoni);
 
             if (buoni.startsWith("ERROR")) {
                 return Response.status(Status.NOT_FOUND)
@@ -38,7 +42,11 @@ public class BuoniResource {
                             .entity("Buono with ID " + ids[i] + " not found")
                             .build();
                 }
-                buoniList[i] = JsonbBuilder.create().fromJson(buonoJson, Buono.class);
+                JsonbConfig config = new JsonbConfig()
+                    .withNullValues(true);
+
+                Jsonb jsonb = JsonbBuilder.create(config);
+                buoniList[i] = jsonb.fromJson(buonoJson, Buono.class);
             }
 
             return Response.ok(JsonbBuilder.create().toJson(buoniList)).build();

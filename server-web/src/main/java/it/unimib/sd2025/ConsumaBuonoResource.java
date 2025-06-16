@@ -1,7 +1,5 @@
 package it.unimib.sd2025;
 
-import jakarta.json.bind.JsonbBuilder;
-import jakarta.ws.rs.GET;
 import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -26,7 +24,9 @@ public class ConsumaBuonoResource {
                         .build();
             }
 
-            return Response.ok(response)
+            String jsonBuonoAggiornato = buonoRepository.getBuono(id); // Ensure the Buono exists before consuming it
+
+            return Response.ok(jsonBuonoAggiornato)
                     .type(MediaType.APPLICATION_JSON)
                     .build();
         } catch (Exception e) {

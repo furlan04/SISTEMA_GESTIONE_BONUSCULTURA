@@ -140,6 +140,11 @@ public class BuonoResource {
                         .entity(userCheck)
                         .build();
             }
+            if(!userRepository.getBuoniUtente(cf).contains(id)) {
+                return Response.status(Status.BAD_REQUEST)
+                        .entity("User does not own the Buono with ID: " + id)
+                        .build();
+            }
             if (userRepository.removeBuonoUtente(cf, id).startsWith("ERROR")) {
                 return Response.status(Status.BAD_REQUEST)
                         .entity("Failed to remove Buono from user")

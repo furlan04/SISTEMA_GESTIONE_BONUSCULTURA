@@ -16,7 +16,7 @@ public class BuonoRepository extends DatabaseConnection {
         if (id == null || id.isEmpty()) {
             return "ERROR: ID cannot be null or empty";
         }
-        String response = sendDatabaseCommand("exists buono:" + id + ":");
+        String response = sendDatabaseCommand("exists buono:" + id);
         if (response.startsWith("ERROR")) {
             return "ERROR: Buono with ID " + id + " does not exist";
         }
@@ -91,6 +91,9 @@ public class BuonoRepository extends DatabaseConnection {
         }
         if (existsBuono(id).equals("false")) {
             return "ERROR: Buono with ID " + id + " does not exist";
+        }
+        if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
+            return "ERROR: Buono with ID " + id + " has not been consumed and cannot be deleted";
         }
         String valore = sendDatabaseCommand("delete buono:" + id + ":valore");
         String tipologia = sendDatabaseCommand("delete buono:" + id + ":tipologia");
