@@ -7,6 +7,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.POST;
+import jakarta.ws.rs.PUT;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
@@ -163,6 +164,32 @@ public class BuonoResource {
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity("Buono not found: " + id)
+                    .build();
+        }
+    }
+
+    @PUT
+    @Path("/{id}/consuma")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response consuma(@PathParam("id") String id) {
+        try {
+            BuonoRepository buonoRepository = new BuonoRepository();
+            String response = buonoRepository.consumaBuono(id);
+
+            if (response.startsWith("ERROR")) {
+                return Response.status(Status.NOT_FOUND)
+                        .entity(response)
+                        .build();
+            }
+
+            String jsonBuonoAggiornato = buonoRepository.getBuono(id); // Ensure the Buono exists before consuming it
+
+            return Response.ok(jsonBuonoAggiornato)
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Status.NOT_FOUND)
+                    .entity("Buono not found: ")
                     .build();
         }
     }
