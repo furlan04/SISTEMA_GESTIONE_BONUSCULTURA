@@ -3,6 +3,7 @@ document.addEventListener("DOMContentLoaded", async function () {
   const id = params.get("id");
   const form = document.getElementById("modificaBuonoForm");
   const msgDiv = document.getElementById("modifica-msg");
+  const codiceFiscale = sessionStorage.getItem("codiceFiscale");
 
   if (!id) {
     msgDiv.textContent = "ID buono mancante nell'URL.";
@@ -13,7 +14,9 @@ document.addEventListener("DOMContentLoaded", async function () {
 
   // Precompila il form con i dati attuali del buono
   try {
-    const response = await fetch(`http://localhost:8080/buono/${encodeURIComponent(id)}`);
+    const response = await fetch(
+      `http://localhost:8080/buono/${encodeURIComponent(id)}`
+    );
     if (!response.ok) throw new Error("Errore nel recupero dati buono");
     const buono = await response.json();
     document.getElementById("valore").value = buono.valore;
@@ -42,17 +45,22 @@ document.addEventListener("DOMContentLoaded", async function () {
     const buonoModificato = {
       id: id,
       valore: Number(valore),
-      tipologia: tipologia
+      tipologia: tipologia,
     };
 
     try {
-      const response = await fetch(`http://localhost:8080/buono/${encodeURIComponent(id)}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(buonoModificato)
-      });
+      const response = await fetch(
+        `http://localhost:8080/buono/${encodeURIComponent(
+          codiceFiscale
+        )}/${encodeURIComponent(id)}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(buonoModificato),
+        }
+      );
 
       const text = await response.text();
 

@@ -21,4 +21,23 @@ document.addEventListener("DOMContentLoaded", () => {
       <li><a href="../login">Login</a></li>
     `;
   }
+
+  fetch("http://localhost:8080/analitica")
+    .then((res) => res.json())
+    .then((data) => {
+      const tbody = document.querySelector("#analitica-table tbody");
+      tbody.innerHTML = `
+        <tr><th>Utenti registrati</th><td>${data.utenti_registrati}</td></tr>
+        <tr><th>Buoni totali</th><td>${data.buoni_totali}</td></tr>
+        <tr><th>Buoni consumati</th><td>${data.buoni_consumati}</td></tr>
+        <tr><th>Buoni non consumati</th><td>${data.buoni_non_consumati}</td></tr>
+        <tr><th>Contributi spesi</th><td>€${Number(data.contributi_spesi).toFixed(2)}</td></tr>
+        <tr><th>Contributi assegnati</th><td>€${Number(data.contributi_assegnati).toFixed(2)}</td></tr>
+        <tr><th>Contributi disponibili</th><td>€${Number(data.contributi_disponibili).toFixed(2)}</td></tr>
+      `;
+    })
+    .catch(() => {
+      const tbody = document.querySelector("#analitica-table tbody");
+      tbody.innerHTML = `<tr><td colspan="2">Errore nel caricamento delle statistiche.</td></tr>`;
+    });
 });
