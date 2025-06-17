@@ -119,9 +119,9 @@ function consumaBuono(buonoId) {
   btn.disabled = true;
   btn.innerHTML = `<span class="button-icon">⏳</span> Consumando...`;
 
-  const url = `http://localhost:8080/consuma-buono/${encodeURIComponent(
+  const url = `http://localhost:8080/buono/${encodeURIComponent(
     buonoId
-  )}`;
+  )}/consuma`;
 
   fetch(url, {
     method: "PUT",
