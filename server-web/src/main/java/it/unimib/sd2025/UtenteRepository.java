@@ -78,8 +78,8 @@ public class UtenteRepository extends DatabaseConnection {
                throw new IOException("Buono with ID " + buonoId + " already exists for user with Codice Fiscale " + cf);
             }
         }
-        sendDatabaseCommand("set utente:" + cf + ":buoni " + buoni + ":" + buonoId);
-        return "SUCCESS";
+        String buoniAgg = sendDatabaseCommand("set utente:" + cf + ":buoni " + buoni + ":" + buonoId);
+        return buoniAgg;
     }
 
     public String getBuoniUtente(String cf) throws IOException {
