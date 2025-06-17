@@ -35,7 +35,7 @@ public class BuonoRepository extends DatabaseConnection {
         }
         try {
             sendDatabaseCommand("set buono:" + buono.getId() + ":valore " + buono.getValore());
-            sendDatabaseCommand("set buono:" + buono.getId() + ":getTipologia() " + buono.getTipologia());
+            sendDatabaseCommand("set buono:" + buono.getId() + ":tipologia " + buono.getTipologia());
             sendDatabaseCommand("set buono:" + buono.getId() + ":dataCreazione " + buono.getDataCreazione().toString());
             sendDatabaseCommand("set buono:" + buono.getId() + ":dataConsumo ");
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public class BuonoRepository extends DatabaseConnection {
         }
 
         String valoreStr = sendDatabaseCommand("get buono:" + id + ":valore");
-        String tipologia = sendDatabaseCommand("get buono:" + id + ":getTipologia()");
+        String tipologia = sendDatabaseCommand("get buono:" + id + ":tipologia");
         String dataCreazioneStr = sendDatabaseCommand("get buono:" + id + ":dataCreazione");
         String dataScadenzaStr = sendDatabaseCommand("get buono:" + id + ":dataConsumo");
 
@@ -93,7 +93,7 @@ public class BuonoRepository extends DatabaseConnection {
             throw new Exception("ERROR: Buono with ID " + id + " has been consumed and cannot be deleted");
         }
         String valore = sendDatabaseCommand("delete buono:" + id + ":valore");
-        String tipologia = sendDatabaseCommand("delete buono:" + id + ":getTipologia()");
+        String tipologia = sendDatabaseCommand("delete buono:" + id + ":tipologia");
         String dataCreazione = sendDatabaseCommand("delete buono:" + id + ":dataCreazione");
         sendDatabaseCommand("delete buono:" + id + ":dataConsumo");
         Buono buono = new Buono(id, Double.parseDouble(valore), tipologia, Date.valueOf(dataCreazione),
