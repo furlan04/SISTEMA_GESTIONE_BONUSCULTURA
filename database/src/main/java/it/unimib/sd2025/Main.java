@@ -11,7 +11,7 @@ public class Main {
      * Porta di ascolto.
      */
     public static final int PORT = 3030;
-    //database
+    // database
     private static Database database = new Database();
 
     /**
@@ -43,7 +43,8 @@ public class Main {
         }
 
         private boolean validAction(String action) {
-            return action.startsWith("get ") || action.startsWith("set ") || action.startsWith("delete ") || action.startsWith("exists ");
+            return action.startsWith("get ") || action.startsWith("set ") || action.startsWith("delete ")
+                    || action.startsWith("exists ") || action.startsWith("getAllKeys ");
         }
 
         public void run() {
@@ -70,7 +71,7 @@ public class Main {
                         break;
                     }
                     out.println(inputLine);
-                    
+
                 }
 
                 in.close();
@@ -93,5 +94,3 @@ public class Main {
         startServer();
     }
 }
-
-
