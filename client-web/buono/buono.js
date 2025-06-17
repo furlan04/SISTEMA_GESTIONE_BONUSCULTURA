@@ -42,6 +42,14 @@ function renderBuono(buono) {
          Consuma Buono
        </button>`;
 
+  // Mostra il bottone elimina solo se NON è consumato
+  const deleteButtonHtml = !isConsumed
+    ? `<button id="delete-buono" class="button-delete">
+         <span class="button-icon">🗑️</span>
+         Elimina Buono
+       </button>`
+    : "";
+
   container.innerHTML = `
     <div class="buono">
       <h3>${capitalize(buono.tipologia)}</h3>
@@ -49,10 +57,7 @@ function renderBuono(buono) {
       ${consumoContent}
       <p><strong>Valore:</strong> €${buono.valore.toFixed(2)}</p>
       <div class="button-group">
-        <button id="delete-buono" class="button-delete">
-          <span class="button-icon">🗑️</span>
-          Elimina Buono
-        </button>
+        ${deleteButtonHtml}
         <a href="../buoni" class="button-back">
           <span class="button-icon">←</span>
           Torna ai Buoni
@@ -64,11 +69,10 @@ function renderBuono(buono) {
   // Aggiungi event listener per il bottone consuma se presente
   if (!isConsumed) {
     setupConsumaButton(buono.id);
-  }
-
-  const deleteBtn = document.getElementById("delete-buono");
-  if (deleteBtn) {
-    deleteBtn.addEventListener("click", () => deleteBuono(buono.id));
+    const deleteBtn = document.getElementById("delete-buono");
+    if (deleteBtn) {
+      deleteBtn.addEventListener("click", () => deleteBuono(buono.id));
+    }
   }
 }
 

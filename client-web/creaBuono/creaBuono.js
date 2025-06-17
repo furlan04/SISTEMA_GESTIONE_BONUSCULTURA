@@ -14,10 +14,16 @@ document.addEventListener("DOMContentLoaded", function () {
     e.preventDefault();
     msgDiv.textContent = "";
 
-    const valore = document.getElementById("valore").value;
-    const tipologia = document.getElementById("tipologia").value;
+    const valore = document.getElementById("valore").value.trim();
+    const tipologia = document.getElementById("tipologia").value.trim();
 
-    // Costruisci il JSON come richiesto da BuonoResource.java
+    // --- Controllo valore valido ---
+    if (!valore || isNaN(valore) || Number(valore) <= 0) {
+      msgDiv.textContent = "Inserisci un importo valido (numero positivo).";
+      msgDiv.style.color = "#b00020";
+      return;
+    }
+
     const buono = {
       valore: valore,
       tipologia: tipologia,
@@ -41,7 +47,16 @@ document.addEventListener("DOMContentLoaded", function () {
         // Reindirizza alla pagina dei buoni
         window.location.href = "../buoni";
       } else {
-        msgDiv.textContent = "Errore: " + text;
+        let errorMsg = text;
+        if (
+          text.includes(
+            "Buono value must be greater than zero or exceeds user's remaining balance"
+          )
+        ) {
+          errorMsg =
+            "Errore: Il valore del buono deve essere maggiore di zero e non superare il saldo rimanente dell'utente.";
+        }
+        msgDiv.textContent = errorMsg;
         msgDiv.style.color = "#b00020";
       }
     } catch (err) {
