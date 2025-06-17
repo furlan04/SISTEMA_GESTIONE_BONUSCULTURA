@@ -28,7 +28,7 @@ public class UtenteRepository extends DatabaseConnection {
             throw new IllegalArgumentException("Codice Fiscale, Nome, Cognome, and Email cannot be null or empty");
         }
         try {
-            if (!existsUtente(utente.getCodiceFiscale())) {
+            if (existsUtente(utente.getCodiceFiscale())) {
                 throw new IOException("User with Codice Fiscale " + utente.getCodiceFiscale() + " already exists");
             }
             sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":nome " + utente.getNome());
