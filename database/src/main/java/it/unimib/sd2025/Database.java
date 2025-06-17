@@ -12,7 +12,7 @@ public class Database {
     private Map<String, String> data;
     private static final String INIT_FILE = "./initData.ini";
 
-    private void seedDatabase(){
+    private void seedDatabase() {
         Path path = Paths.get(INIT_FILE);
         try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
             String line;
@@ -21,7 +21,7 @@ public class Database {
                 if (line.trim().startsWith(";") || line.trim().isEmpty()) {
                     continue;
                 }
-                
+
                 // Split the line into key and value
                 String[] parts = line.split(" ", 2);
                 if (parts.length == 2) {
@@ -35,7 +35,7 @@ public class Database {
         }
     }
 
-    public Database (){
+    public Database() {
         this.data = new HashMap<String, String>();
         seedDatabase();
 
@@ -44,19 +44,23 @@ public class Database {
     /**
      * Esegue un'azione basata sul comando fornito.
      * 
-     * @param command Il comando da eseguire, ad esempio "get key", "set key value", "delete key".
+     * @param command Il comando da eseguire, ad esempio "get key", "set key value",
+     *                "delete key".
      * @return Il risultato dell'azione eseguita.
-     * @throws Exception Se il comando non è valido o se si verifica un errore durante l'esecuzione.
+     * @throws Exception Se il comando non è valido o se si verifica un errore
+     *                   durante l'esecuzione.
      */
     public synchronized String action(String command) throws Exception {
         if (command == null || command.isEmpty()) {
             throw new Exception("Command cannot be null or empty");
         }
-        String method = command.split(" ")[0];
-        String key = command.split(" ")[1];
+        // Split the command into method, key, and value (max 3 parts)
+        String[] parts = command.split(" ", 3);
+        String method = parts[0];
+        String key = parts[1];
         String value = "";
-        if(command.split(" ").length > 2) {
-            value = command.split(" ")[2];
+        if (parts.length > 2) {
+            value = parts[2];
         }
         switch (method.toLowerCase()) {
             case "exists":
@@ -74,7 +78,7 @@ public class Database {
         }
     }
 
-    public String getKeys () {
+    public String getKeys() {
         StringBuilder keys = new StringBuilder();
         for (String key : data.keySet()) {
             keys.append(key).append(";");
@@ -83,15 +87,15 @@ public class Database {
     }
 
     public String get(String key) throws Exception {
-       
+
         if (data.containsKey(key)) {
             return data.get(key);
         } else {
             throw new Exception("Key not found: " + key);
         }
     }
-    
-    public String set(String key, String value){
+
+    public String set(String key, String value) {
         if (data.containsKey(key)) {
             String oldValue = data.get(key);
             data.put(key, value);
@@ -113,7 +117,7 @@ public class Database {
     }
 
     public String exists(String partial_key) {
-        if(partial_key == null || partial_key.isEmpty()) {
+        if (partial_key == null || partial_key.isEmpty()) {
             return "false";
         }
         for (String key : data.keySet()) {
