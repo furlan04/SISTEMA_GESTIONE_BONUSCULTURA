@@ -44,7 +44,7 @@ public class Main {
 
         private boolean validAction(String action) {
             return action.startsWith("get ") || action.startsWith("set ") || action.startsWith("delete ")
-                    || action.startsWith("exists ") || action.startsWith("getAllKeys ");
+                    || action.startsWith("exists ") || action.startsWith("getAllKeys");
         }
 
         public void run() {

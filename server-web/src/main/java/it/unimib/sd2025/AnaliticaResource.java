@@ -21,7 +21,7 @@ public class AnaliticaResource {
         try {
             DatabaseConnection dbConnection = new DatabaseConnection();
 
-            String allKeysResponse = dbConnection.sendDatabaseCommand("getAllKeys ");
+            String allKeysResponse = dbConnection.sendDatabaseCommand("getAllKeys");
             System.out.println("All keys retrieved: " + allKeysResponse);
             String[] keys = allKeysResponse.split(";");
 
