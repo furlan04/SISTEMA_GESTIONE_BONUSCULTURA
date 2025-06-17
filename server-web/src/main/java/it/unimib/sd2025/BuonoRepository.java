@@ -41,7 +41,7 @@ public class BuonoRepository extends DatabaseConnection {
         } catch (IOException e) {
             throw new Exception("ERROR: Failed to create Buono with ID " + buono.getId()+ ". " + e.getMessage());
         }
-        return buono;
+        return new_buono;
     }
 
     public Buono getBuono(String id) throws IOException, Exception {
@@ -106,7 +106,7 @@ public class BuonoRepository extends DatabaseConnection {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ERROR: ID cannot be null or empty");
         }
-        if (existsBuono(id)) {
+        if (!existsBuono(id)) {
             throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
         if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {

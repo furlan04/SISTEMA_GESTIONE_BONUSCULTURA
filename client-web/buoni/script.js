@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     .catch((error) => {
       console.error("Errore:", error);
       document.getElementById("buoni-lista").innerText =
-        "Errore nel recupero dei buoni.";
+        "Non è ancora stato creato nessun buono.";
     });
 });
 
