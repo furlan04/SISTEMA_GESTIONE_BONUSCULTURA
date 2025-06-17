@@ -67,3 +67,22 @@ h2 {
   background: #89f7fe;
   color: #2d3a4b;
 }
+
+.button-forn {
+  margin-bottom: 18px;
+  background: linear-gradient(135deg, #66a6ff 0%, #89f7fe 100%);
+  color: #fff;
+  border: none;
+  padding: 10px 22px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  box-shadow: 0 4px 15px rgba(102, 166, 255, 0.15);
+}
+
+.button-forn:hover {
+  background: linear-gradient(135deg, #89f7fe 0%, #66a6ff 100%);
+  color: #2d3a4b;
+}

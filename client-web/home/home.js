@@ -10,10 +10,10 @@ document.addEventListener("DOMContentLoaded", () => {
       <li><a href="../buoni">Buoni</a></li>
       <li><a href="#" id="logout">Logout</a></li>
     `;
-    document.getElementById("logout").addEventListener("click", e => {
+    document.getElementById("logout").addEventListener("click", (e) => {
       e.preventDefault();
       sessionStorage.removeItem("codiceFiscale");
-      location.reload();
+      window.location.href = "../home"; // <--- redirect alla home
     });
   } else {
     // Utente non loggato
