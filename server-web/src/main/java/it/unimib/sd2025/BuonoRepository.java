@@ -29,8 +29,7 @@ public class BuonoRepository extends DatabaseConnection {
         }
     }
 
-    public Buono createBuono(Buono buono) throws Exception, IllegalArgumentException, IOException
-            throws IOException {
+    public Buono createBuono(Buono buono) throws Exception, IllegalArgumentException, IOException{
         if (buono.id == null || buono.id.isEmpty() || buono.tipologia == null || buono.tipologia.isEmpty() || buono.dataCreazione == null || buono.dataCreazione.toString().isEmpty()) {
             throw new IllegalArgumentException( "ERROR: ID, Tipologia, Data Creazione cannot be null or empty");
         }
