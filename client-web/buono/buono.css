@@ -134,6 +134,31 @@ body {
   box-shadow: 0 6px 16px rgba(244, 67, 54, 0.3);
 }
 
+/* Bottone Modifica Buono */
+.button-modify {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 24px;
+  background: linear-gradient(135deg, #ffc107 0%, #ffe082 100%);
+  color: #2d3a4b;
+  border: none;
+  border-radius: 25px;
+  font-family: "Segoe UI", Arial, sans-serif;
+  font-weight: 500;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.15);
+  cursor: pointer;
+  margin-right: 10px;
+}
+
+.button-modify:hover {
+  background: linear-gradient(135deg, #ffb300 0%, #ffe082 100%);
+  color: #fff;
+  transform: translateY(-2px);
+}
+
 /* Icone nei bottoni */
 .button-icon {
   font-size: 1.2rem;

@@ -43,6 +43,13 @@ function renderBuono(buono) {
        </button>`;
 
   // Mostra il bottone elimina solo se NON è consumato
+  const modifyButtonHtml = !isConsumed
+    ? `<button id="modify-buono" class="button-modify">
+         <span class="button-icon">✏️</span>
+         Modifica
+       </button>`
+    : "";
+
   const deleteButtonHtml = !isConsumed
     ? `<button id="delete-buono" class="button-delete">
          <span class="button-icon">🗑️</span>
@@ -57,6 +64,7 @@ function renderBuono(buono) {
       ${consumoContent}
       <p><strong>Valore:</strong> €${buono.valore.toFixed(2)}</p>
       <div class="button-group">
+        ${modifyButtonHtml}
         ${deleteButtonHtml}
         <a href="../buoni" class="button-back">
           <span class="button-icon">←</span>
@@ -72,6 +80,15 @@ function renderBuono(buono) {
     const deleteBtn = document.getElementById("delete-buono");
     if (deleteBtn) {
       deleteBtn.addEventListener("click", () => deleteBuono(buono.id));
+    }
+    // Event listener per modifica
+    const modifyBtn = document.getElementById("modify-buono");
+    if (modifyBtn) {
+      modifyBtn.addEventListener("click", () => {
+        window.location.href = `../modifcaBuono/index.html?id=${encodeURIComponent(
+          buono.id
+        )}`;
+      });
     }
   }
 }
