@@ -12,7 +12,6 @@ public class Database {
     private Map<String, String> data;
     private static final String INIT_FILE = "./initData.ini";
 
-    
     private void seedDatabase(){
         Path path = Paths.get(INIT_FILE);
         try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
@@ -62,6 +61,8 @@ public class Database {
         switch (method.toLowerCase()) {
             case "exists":
                 return exists(key);
+            case "getAllKeys":
+                return getKeys();
             case "get":
                 return get(key);
             case "set":
@@ -73,6 +74,13 @@ public class Database {
         }
     }
 
+    public String getKeys () {
+        StringBuilder keys = new StringBuilder();
+        for (String key : data.keySet()) {
+            keys.append(key).append(";");
+        }
+        return keys.toString().trim(); // Remove trailing newline
+    }
 
     public String get(String key) throws Exception {
        
@@ -83,8 +91,6 @@ public class Database {
         }
     }
     
-    
-
     public String set(String key, String value){
         if (data.containsKey(key)) {
             String oldValue = data.get(key);

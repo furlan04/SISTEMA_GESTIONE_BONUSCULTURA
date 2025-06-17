@@ -28,7 +28,7 @@ public class UtenteRepository extends DatabaseConnection {
             throw new IllegalArgumentException("Codice Fiscale, Nome, Cognome, and Email cannot be null or empty");
         }
         try {
-            if (!existsUtente(utente.getCodiceFiscale())) {
+            if (existsUtente(utente.getCodiceFiscale())) {
                 throw new IOException("User with Codice Fiscale " + utente.getCodiceFiscale() + " already exists");
             }
             sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":nome " + utente.getNome());
@@ -155,11 +155,13 @@ public class UtenteRepository extends DatabaseConnection {
         }
         double saldoRimasto = 0.0;
         for (String id : buoni.split(":")) {
-            String saldo = sendDatabaseCommand("get buono:" + id + ":valore");
-            if (saldo.startsWith("ERROR")) {
-                throw new IOException("Failed to retrieve value for Buono with ID " + id);
+            if(!(id == null || id.isEmpty())) {
+                String saldo = sendDatabaseCommand("get buono:" + id + ":valore");
+                if (saldo.startsWith("ERROR")) {
+                    throw new IOException("Failed to retrieve value for Buono with ID " + id);
+                }
+                saldoRimasto += Double.parseDouble(saldo);
             }
-            saldoRimasto += Double.parseDouble(saldo);
         }
         return new SaldoRimasto(500 - saldoRimasto);
     }
