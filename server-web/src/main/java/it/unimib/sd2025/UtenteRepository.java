@@ -22,21 +22,22 @@ public class UtenteRepository extends DatabaseConnection {
     }
 
     public Utente createUtente(Utente utente) throws IOException {
-        if (utente.codiceFiscale == null || utente.codiceFiscale.isEmpty() || utente.nome == null || utente.nome.isEmpty() || utente.cognome == null || utente.cognome.isEmpty()
-                || utente.email == null || utente.email.isEmpty()) {
+        if (utente.getCodiceFiscale() == null || utente.getCodiceFiscale().isEmpty() || utente.getNome() == null || utente.getNome().isEmpty() 
+                || utente.getCognome() == null || utente.getCognome().isEmpty()
+                || utente.getEmail() == null || utente.getEmail().isEmpty()) {
             throw new IllegalArgumentException("Codice Fiscale, Nome, Cognome, and Email cannot be null or empty");
         }
         try {
-            if (!existsUtente(utente.codiceFiscale)) {
-                throw new IOException("User with Codice Fiscale " + utente.codiceFiscale + " already exists");
+            if (!existsUtente(utente.getCodiceFiscale())) {
+                throw new IOException("User with Codice Fiscale " + utente.getCodiceFiscale() + " already exists");
             }
-            sendDatabaseCommand("set utente:" + utente.codiceFiscale + ":nome " + utente.nome);
-            sendDatabaseCommand("set utente:" + utente.codiceFiscale + ":cognome " + utente.cognome);
-            sendDatabaseCommand("set utente:" + utente.codiceFiscale + ":email " + utente.email);
-            sendDatabaseCommand("set utente:" + utente.codiceFiscale + ":buoni");
+            sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":nome " + utente.getNome());
+            sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":cognome " + utente.getCognome());
+            sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":email " + utente.getEmail());
+            sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":buoni");
 
         } catch (IOException e) {
-            throw new IOException("Failed to create user with Codice Fiscale " + utente.codiceFiscale + ". " + e.getMessage());
+            throw new IOException("Failed to create user with Codice Fiscale " + utente.getCodiceFiscale() + ". " + e.getMessage());
         }
         return utente;
     }
@@ -77,8 +78,8 @@ public class UtenteRepository extends DatabaseConnection {
                throw new IOException("Buono with ID " + buonoId + " already exists for user with Codice Fiscale " + cf);
             }
         }
-        sendDatabaseCommand("set utente:" + cf + ":buoni " + buoni + ":" + buonoId);
-        return "SUCCESS";
+        String buoniAgg = sendDatabaseCommand("set utente:" + cf + ":buoni " + buoni + ":" + buonoId);
+        return buoniAgg;
     }
 
     public String getBuoniUtente(String cf) throws IOException {

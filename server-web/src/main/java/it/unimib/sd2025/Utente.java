@@ -1,14 +1,15 @@
 package it.unimib.sd2025;
 
+import jakarta.json.bind.annotation.JsonbProperty;
 
 public class Utente {
-    public String nome;
-    
-    public String cognome;
-    
-    public String email;
-    
-    public String codiceFiscale;
+    private String nome;
+
+    private String cognome;
+
+    private String email;
+
+    private String codiceFiscale;
 
     // Costruttore vuoto OBBLIGATORIO per JSON parsing
     public Utente() {
@@ -22,46 +23,43 @@ public class Utente {
         this.codiceFiscale = codiceFiscale;
     }
 
-    // Getter e setter
+    @JsonbProperty("nome")
     public String getNome() {
         return nome;
     }
-    
+
+    @JsonbProperty("nome")
     public void setNome(String nome) {
         this.nome = nome;
     }
-    
+
+    @JsonbProperty("cognome")
     public String getCognome() {
         return cognome;
     }
 
+    @JsonbProperty("cognome")
     public void setCognome(String cognome) {
         this.cognome = cognome;
     }
-    
+
+    @JsonbProperty("email")
     public String getEmail() {
         return email;
     }
-    
+
+    @JsonbProperty("email")
     public void setEmail(String email) {
         this.email = email;
     }
-    
+
+    @JsonbProperty("codiceFiscale")
     public String getCodiceFiscale() {
         return codiceFiscale;
     }
-    
+
+    @JsonbProperty("codiceFiscale")
     public void setCodiceFiscale(String codiceFiscale) {
         this.codiceFiscale = codiceFiscale;
-    }
-
-    @Override
-    public String toString() {
-        return "Utente{" +
-                "Nome='" + nome + '\'' +
-                ", Cognome='" + cognome + '\'' +
-                ", Email='" + email + '\'' +
-                ", CodiceFiscale='" + codiceFiscale + '\'' +
-                '}';
     }
 }
