@@ -124,8 +124,8 @@ public class BuonoResource {
             }
             Buono deleted_buono;
             try{
-                userRepository.removeBuonoUtente(cf, id);
                 deleted_buono = buonoRepository.deleteBuono(id);
+                userRepository.removeBuonoUtente(cf, id);
             }
             catch(Exception e) {
                 return Response.status(Status.BAD_REQUEST)
@@ -159,4 +159,30 @@ public class BuonoResource {
                     .build();
         }
     }
+
+    @PUT
+    @Path("/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response modifyBuono(@PathParam("id") String id, String buonoJson) {
+        if (id == null || id.isEmpty() || buonoJson == null || buonoJson.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST)
+                    .entity("Buono ID and data cannot be null or empty")
+                    .build();
+        }
+        BuonoRepository buonoRepository = new BuonoRepository();
+        try {
+            Buono updatedBuono = jsonb.fromJson(buonoJson, Buono.class);
+            updatedBuono = buonoRepository.updateBuono(id, updatedBuono);
+            return Response.ok(jsonb.toJson(updatedBuono))
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST)
+                    .entity(e.getMessage())
+                    .build();
+        }
+        
+    }
+
+
 }
