@@ -86,7 +86,7 @@ public class BuonoRepository extends DatabaseConnection {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ERROR: ID cannot be null or empty");
         }
-        if (existsBuono(id)) {
+        if (!existsBuono(id)) {
             throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
         if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
@@ -119,5 +119,22 @@ public class BuonoRepository extends DatabaseConnection {
             throw new IOException("ERROR: Buono with ID " + id + " could not be retrieved after consumption");
         }
         return buono;
+    }
+
+    public Buono updateBuono(String id, Buono updatedBuono) throws Exception {
+        if (id == null || id.isEmpty() || updatedBuono == null) {
+            throw new IllegalArgumentException("ERROR: ID and updated Buono cannot be null or empty");
+        }
+        if (!existsBuono(id)) {
+            throw new Exception("ERROR: Buono with ID " + id + " does not exist");
+        }
+        if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
+            throw new Exception("ERROR: Buono with ID " + id + " has already been consumed and cannot be modified");
+        }
+        
+        sendDatabaseCommand("set buono:" + id + ":valore " + updatedBuono.getValore());
+        sendDatabaseCommand("set buono:" + id + ":tipologia " + updatedBuono.getTipologia());
+                
+        return getBuono(id);
     }
 }
