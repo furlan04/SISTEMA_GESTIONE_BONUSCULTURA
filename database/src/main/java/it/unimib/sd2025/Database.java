@@ -53,7 +53,12 @@ public class Database {
             throw new Exception("Command cannot be null or empty");
         }
         String method = command.split(" ")[0];
-        String key = command.split(" ")[1];
+        String key;
+        if(command.split(" ").length < 2) {
+            key = "";
+        } else {
+            key = command.split(" ")[1];
+        }
         String value = "";
         if(command.split(" ").length > 2) {
             value = command.split(" ")[2];
@@ -61,7 +66,7 @@ public class Database {
         switch (method.toLowerCase()) {
             case "exists":
                 return exists(key);
-            case "getAllKeys":
+            case "getallkeys":
                 return getKeys();
             case "get":
                 return get(key);
