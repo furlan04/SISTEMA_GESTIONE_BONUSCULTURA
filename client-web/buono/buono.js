@@ -85,7 +85,7 @@ function renderBuono(buono) {
     const modifyBtn = document.getElementById("modify-buono");
     if (modifyBtn) {
       modifyBtn.addEventListener("click", () => {
-        window.location.href = `../modifcaBuono/index.html?id=${encodeURIComponent(
+        window.location.href = `../modificaBuono/index.html?id=${encodeURIComponent(
           buono.id
         )}`;
       });
