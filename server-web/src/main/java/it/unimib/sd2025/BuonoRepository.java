@@ -26,7 +26,7 @@ public class BuonoRepository extends DatabaseConnection {
     }
 
     public Buono createBuono(Buono buono) throws Exception, IllegalArgumentException, IOException{
-        if (buono.getId() == null || buono.getId().isEmpty() || buono.getTipologia() == null || buono.getTipologia().isEmpty()) {
+        if (buono.getTipologia() == null || buono.getTipologia().isEmpty()){
             throw new IllegalArgumentException( "ERROR: ID, Tipologia, Data Creazione cannot be null or empty");
         }
         Buono new_buono = new Buono(buono.getValore(), buono.getTipologia());
@@ -34,10 +34,10 @@ public class BuonoRepository extends DatabaseConnection {
             new_buono.setId(String.valueOf(Id.getNextId()));
         }
         try {
-            sendDatabaseCommand("set buono:" + buono.getId() + ":valore " + new_buono.getValore());
-            sendDatabaseCommand("set buono:" + buono.getId() + ":tipologia " + new_buono.getTipologia());
-            sendDatabaseCommand("set buono:" + buono.getId() + ":dataCreazione " + new_buono.getDataCreazione().toString());
-            sendDatabaseCommand("set buono:" + buono.getId() + ":dataConsumo ");
+            sendDatabaseCommand("set buono:" + new_buono.getId() + ":valore " + new_buono.getValore());
+            sendDatabaseCommand("set buono:" + new_buono.getId() + ":tipologia " + new_buono.getTipologia());
+            sendDatabaseCommand("set buono:" + new_buono.getId() + ":dataCreazione " + new_buono.getDataCreazione().toString());
+            sendDatabaseCommand("set buono:" + new_buono.getId() + ":dataConsumo ");
         } catch (IOException e) {
             throw new Exception("ERROR: Failed to create Buono with ID " + buono.getId()+ ". " + e.getMessage());
         }
@@ -134,7 +134,7 @@ public class BuonoRepository extends DatabaseConnection {
         
         sendDatabaseCommand("set buono:" + id + ":valore " + updatedBuono.getValore());
         sendDatabaseCommand("set buono:" + id + ":tipologia " + updatedBuono.getTipologia());
-                
+
         return getBuono(id);
     }
 }
