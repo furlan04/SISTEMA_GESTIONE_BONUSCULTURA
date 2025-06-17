@@ -34,7 +34,7 @@ public class BuonoResource {
                .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                    .entity("Buono not found: ")
+                    .entity(e.getMessage())
                     .build();
         }
     }
@@ -138,7 +138,7 @@ public class BuonoResource {
                .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                    .entity("Buono not found: " + id)
+                    .entity(e.getMessage())
                     .build();
         }
     }
