@@ -12,44 +12,49 @@ public class BuonoRepository extends DatabaseConnection {
         super();
     }
 
-    public String existsBuono(String id) throws IOException {
+    public boolean existsBuono(String id) throws IOException {
         if (id == null || id.isEmpty()) {
-            return "ERROR: ID cannot be null or empty";
+            throw new IllegalArgumentException( "ERROR: ID cannot be null or empty");
         }
         String response = sendDatabaseCommand("exists buono:" + id);
         if (response.startsWith("ERROR")) {
-            return "ERROR: Buono with ID " + id + " does not exist";
+            throw new IOException( "ERROR: Buono with ID " + id + " does not exist");
         }
-        return response;
+        if (response.equals("true")) {
+            return true;
+        } else if (response.equals("false")) {
+            return false;
+        } else {
+            throw new IOException("ERROR: Unexpected response from database for Buono with ID " + id);
+        }
     }
 
-    public String createBuono(String id, double valore, String tipologia, String dataCreazione)
+    public Buono createBuono(Buono buono) throws Exception, IllegalArgumentException, IOException
             throws IOException {
-        if (id == null || id.isEmpty() || tipologia == null || tipologia.isEmpty() || dataCreazione == null
-                || dataCreazione.isEmpty()) {
-            return "ERROR: ID, Tipologia, Data Creazione cannot be null or empty";
+        if (buono.id == null || buono.id.isEmpty() || buono.tipologia == null || buono.tipologia.isEmpty() || buono.dataCreazione == null || buono.dataCreazione.toString().isEmpty()) {
+            throw new IllegalArgumentException( "ERROR: ID, Tipologia, Data Creazione cannot be null or empty");
         }
-        if (existsBuono(id).equals("true")) {
-            return "ERROR: Buono with ID " + id + " already exists";
+        if (existsBuono(buono.id)) {
+            throw new IOException("ERROR: Buono with ID " + buono.id + " already exists");
         }
         try {
-            sendDatabaseCommand("set buono:" + id + ":valore " + valore);
-            sendDatabaseCommand("set buono:" + id + ":tipologia " + tipologia);
-            sendDatabaseCommand("set buono:" + id + ":dataCreazione " + dataCreazione);
-            sendDatabaseCommand("set buono:" + id + ":dataConsumo ");
+            sendDatabaseCommand("set buono:" + buono.id + ":valore " + buono.valore);
+            sendDatabaseCommand("set buono:" + buono.id + ":tipologia " + buono.tipologia);
+            sendDatabaseCommand("set buono:" + buono.id + ":dataCreazione " + buono.dataCreazione);
+            sendDatabaseCommand("set buono:" + buono.id + ":dataConsumo ");
         } catch (IOException e) {
-            return "ERROR: Failed to create Buono with ID " + id + ". " + e.getMessage();
+            throw new Exception("ERROR: Failed to create Buono with ID " + buono.id + ". " + e.getMessage());
         }
-        return "SUCCESS";
+        return buono;
     }
 
-    public String getBuono(String id) throws IOException {
+    public Buono getBuono(String id) throws IOException {
         if (id == null || id.isEmpty()) {
-            return "ERROR: ID cannot be null or empty";
+            throw new IllegalArgumentException("ERROR: ID cannot be null or empty");
         }
 
         if (!"true".equals(existsBuono(id))) {
-            return "ERROR: Buono with ID " + id + " does not exist";
+            throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
 
         String valoreStr = sendDatabaseCommand("get buono:" + id + ":valore");
@@ -60,7 +65,7 @@ public class BuonoRepository extends DatabaseConnection {
         // Controlla errori nella risposta dal DB
         if (valoreStr.startsWith("ERROR") || tipologia.startsWith("ERROR") ||
                 dataCreazioneStr.startsWith("ERROR") || dataScadenzaStr.startsWith("ERROR")) {
-            return "ERROR: Buono with ID " + id + " could not be retrieved";
+            throw new IOException("ERROR: Buono with ID " + id + " could not be retrieved");
         }
 
         try {
@@ -75,25 +80,21 @@ public class BuonoRepository extends DatabaseConnection {
 
             Buono buono = new Buono(id, valore, tipologia, dataCreazione, dataScadenza);
 
-            JsonbConfig config = new JsonbConfig()
-                    .withNullValues(true);
-
-            Jsonb jsonb = JsonbBuilder.create(config);
-            return jsonb.toJson(buono);
+            return buono;
         } catch (IllegalArgumentException e) {
-            return "ERROR: Invalid data format for Buono with ID " + id;
+            throw new IOException("ERROR: Invalid data format for Buono with ID " + id);
         }
     }
 
-    public String deleteBuono(String id) throws IOException {
+    public Buono deleteBuono(String id) throws IOException {
         if (id == null || id.isEmpty()) {
-            return "ERROR: ID cannot be null or empty";
+            throw new IllegalArgumentException("ERROR: ID cannot be null or empty");
         }
-        if (existsBuono(id).equals("false")) {
-            return "ERROR: Buono with ID " + id + " does not exist";
+        if (existsBuono(id)) {
+            throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
         if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
-            return "ERROR: Buono with ID " + id + " has not been consumed and cannot be deleted";
+            throw new Exception("ERROR: Buono with ID " + id + " has been consumed and cannot be deleted");
         }
         String valore = sendDatabaseCommand("delete buono:" + id + ":valore");
         String tipologia = sendDatabaseCommand("delete buono:" + id + ":tipologia");
@@ -101,25 +102,26 @@ public class BuonoRepository extends DatabaseConnection {
         sendDatabaseCommand("delete buono:" + id + ":dataConsumo");
         Buono buono = new Buono(id, Double.parseDouble(valore), tipologia, Date.valueOf(dataCreazione),
                 null);
-        JsonbConfig config = new JsonbConfig()
-                .withNullValues(true);
-
-        Jsonb jsonb = JsonbBuilder.create(config);
-        return jsonb.toJson(buono);
+        
+        return buono;
     }
 
-    public String consumaBuono(String id) throws IOException {
+    public Buono consumaBuono(String id) throws IOException {
         if (id == null || id.isEmpty()) {
-            return "ERROR: ID cannot be null or empty";
+            throw new IllegalArgumentException("ERROR: ID cannot be null or empty");
         }
-        if (existsBuono(id).equals("false")) {
-            return "ERROR: Buono with ID " + id + " does not exist";
+        if (existsBuono(id)) {
+            throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
         if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
-            return "ERROR: Buono with ID " + id + " has already been consumed";
+            throw new Exception("ERROR: Buono with ID " + id + " has already been consumed");
         }
         String dataConsumo = new Date(System.currentTimeMillis()).toString();
         sendDatabaseCommand("set buono:" + id + ":dataConsumo " + dataConsumo);
-        return "SUCCESS: Buono with ID " + id + " consumed on " + dataConsumo;
+        Buono buono = getBuono(id);
+        if (buono == null) {
+            throw new IOException("ERROR: Buono with ID " + id + " could not be retrieved after consumption");
+        }
+        return buono;
     }
 }

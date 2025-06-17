@@ -87,6 +87,25 @@ public class UtenteResource {
                     .build();
         }
     }
+
+    @GET
+    @Path("/{cf}/saldo")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getSaldoUtente(@PathParam("cf") String cf) {
+        try {
+            UtenteRepository utenteRepo = new UtenteRepository();
+            
+            String saldoRimasto = utenteRepo.getSaldoRimastoUtente(cf);
+
+            return Response.ok(saldoRimasto)
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Status.NOT_FOUND)
+                    .entity("Buono not found: ")
+                    .build();
+        }
+    }
     /*
      * @PUT
      * 
