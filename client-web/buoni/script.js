@@ -6,17 +6,20 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
+  mostraSaldoRimanente(codiceFiscale); // <--- AGGIUNTA QUI
+
   fetch(`http://localhost:8080/buoni/${codiceFiscale}`)
-    .then(response => {
+    .then((response) => {
       if (!response.ok) throw new Error("Errore nella richiesta API");
       return response.json();
     })
-    .then(data => {
+    .then((data) => {
       mostraBuoni(data);
     })
-    .catch(error => {
+    .catch((error) => {
       console.error("Errore:", error);
-      document.getElementById("buoni-lista").innerText = "Errore nel recupero dei buoni.";
+      document.getElementById("buoni-lista").innerText =
+        "Errore nel recupero dei buoni.";
     });
 });
 
@@ -28,13 +31,17 @@ function mostraBuoni(buoni) {
     return;
   }
 
-  buoni.forEach(buono => {
+  buoni.forEach((buono) => {
     const div = document.createElement("div");
     div.className = "buono";
     div.innerHTML = `
       <h3>${capitalize(buono.tipologia)}</h3>
       <p><strong>Data Creazione:</strong> ${formatDate(buono.dataCreazione)}</p>
-      <p><strong>Data Consumo:</strong> ${buono.dataConsumo ? formatDate(buono.dataConsumo) : "Buono non consumato"}</p>
+      <p><strong>Data Consumo:</strong> ${
+        buono.dataConsumo
+          ? formatDate(buono.dataConsumo)
+          : "Buono non consumato"
+      }</p>
       <p><strong>Valore:</strong> €${buono.valore.toFixed(2)}</p>
       <a href="../buono/?id=${buono.id}" class="button">Visualizza Dettagli</a>
     `;
@@ -49,4 +56,27 @@ function formatDate(isoDate) {
 
 function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+// --- FUNZIONE AGGIUNTA ---
+function mostraSaldoRimanente(codiceFiscale) {
+  fetch(
+    `http://localhost:8080/utente/${encodeURIComponent(codiceFiscale)}/saldo`
+  )
+    .then((response) => {
+      if (!response.ok) throw new Error("Errore nel recupero del saldo");
+      return response.json();
+    })
+    .then((data) => {
+      // Usa data.saldo invece di data
+      document.getElementById(
+        "saldo-rimanente"
+      ).innerHTML = `<strong>Saldo rimanente:</strong> €${Number(
+        data.saldo
+      ).toFixed(2)}`;
+    })
+    .catch((error) => {
+      document.getElementById("saldo-rimanente").innerHTML =
+        "Errore nel recupero del saldo rimanente.";
+    });
 }

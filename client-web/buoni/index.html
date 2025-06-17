@@ -1,16 +1,33 @@
 <!DOCTYPE html>
 <html lang="it">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Lista Buoni</title>
-  <link rel="stylesheet" href="styles.css" />
-</head>
-<body>
-  <div class="main-container">
-    <h2>Lista Buoni</h2>
-    <div id="buoni-lista" class="lista-buoni"></div>
-  </div>
-  <script src="script.js"></script>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Lista Buoni</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="../home/home.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="nav-container">
+        <a href="../home" class="brand">MyApp</a>
+        <ul class="nav-links" id="nav-links">
+          <!-- I link saranno inseriti via JS -->
+        </ul>
+      </div>
+    </nav>
+    <div class="main-container">
+      <h2>Lista Buoni</h2>
+      <button
+        onclick="window.location.href='../buonoForm'"
+        class="button button-forn"
+      >
+        Crea un nuovo buono
+      </button>
+      <p id="saldo-rimanente" class="saldo-rimanente"></p>
+      <div id="buoni-lista" class="lista-buoni"></div>
+    </div>
+    <script src="../home/home.js"></script>
+    <script src="script.js"></script>
+  </body>
 </html>

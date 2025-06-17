@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="it">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Crea Buono</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="buonoForm.css" />
+  </head>
+  <body>
+    <div class="buono-form-container">
+      <h2>Crea un nuovo Buono</h2>
+      <form id="buonoForm">
+        <div class="form-group">
+          <label for="valore">Valore (€):</label>
+          <input
+            type="text"
+            id="valore"
+            name="valore"
+            required
+          />
+        </div>
+        <div class="form-group">
+          <label for="tipologia">Tipologia:</label>
+          <input
+            type="text"
+            id="tipologia"
+            name="tipologia"
+            required
+          />
+        </div>
+        <button type="submit">Crea Buono</button>
+      </form>
+      <div id="buono-msg" class="msg"></div>
+    </div>
+    <script src="buonoForm.js"></script>
+  </body>
+</html>
