@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Modifica Buono</title>
+  <link rel="stylesheet" href="modificaBuono.css" />
+</head>
+<body>
+  <div class="buono-form-container">
+    <h2>Modifica Buono</h2>
+    <form id="modificaBuonoForm">
+      <div class="form-group">
+        <label for="valore">Valore (€):</label>
+        <input type="text" id="valore" name="valore" required />
+      </div>
+      <div class="form-group">
+        <label for="tipologia">Tipologia:</label>
+        <input type="text" id="tipologia" name="tipologia" required />
+      </div>
+      <button type="submit">Salva Modifiche</button>
+    </form>
+    <div id="modifica-msg" class="msg"></div>
+  </div>
+  <script src="modificaBuono.js"></script>
+</body>
+</html>
