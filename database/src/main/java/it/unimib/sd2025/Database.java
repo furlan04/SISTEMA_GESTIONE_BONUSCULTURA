@@ -56,10 +56,8 @@ public class Database {
         }
         String[] parts = command.split(" ", 3);
         String method = parts[0];
-        String key;
-        if(parts.length < 2) {
-            key = "";
-        } else {
+        String key = "";
+        if(parts.length > 1) {
             key = parts[1];
         }
         String value = "";
