@@ -8,15 +8,15 @@ public class Buono {
     private String id;
     private double valore;
     private String tipologia;
-    private Date dataCreazione = new Date(System.currentTimeMillis());
+    private Date dataCreazione;
     private Date dataConsumo = null;
 
-    public Buono(double valore, String tipologia, Date dataCreazione, Date dataConsumo) {
+    public Buono(double valore, String tipologia) {
         this.id = String.valueOf(Id.getNextId());
         this.valore = valore;
         this.tipologia = tipologia;
-        this.dataCreazione = dataCreazione;
-        this.dataConsumo = dataConsumo;
+        this.dataCreazione = new Date(System.currentTimeMillis());
+        this.dataConsumo = null;
     }
     public Buono(String id, double valore, String tipologia, Date dataCreazione, Date dataConsumo) {
         this.id = id;

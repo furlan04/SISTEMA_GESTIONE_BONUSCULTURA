@@ -26,17 +26,17 @@ public class BuonoRepository extends DatabaseConnection {
     }
 
     public Buono createBuono(Buono buono) throws Exception, IllegalArgumentException, IOException{
-        if (buono.getId() == null || buono.getId().isEmpty() || buono.getTipologia() == null || buono.getTipologia().isEmpty() || buono.getDataCreazione() == null || buono.getDataCreazione().toString().isEmpty()) {
+        if (buono.getId() == null || buono.getId().isEmpty() || buono.getTipologia() == null || buono.getTipologia().isEmpty()) {
             throw new IllegalArgumentException( "ERROR: ID, Tipologia, Data Creazione cannot be null or empty");
         }
-        buono.setId(String.valueOf(Id.getNextId()));
-        while (existsBuono(buono.getId())) {
-            buono.setId(String.valueOf(Id.getNextId()));
+        Buono new_buono = new Buono(buono.getValore(), buono.getTipologia());
+        while (existsBuono(new_buono.getId())) {
+            new_buono.setId(String.valueOf(Id.getNextId()));
         }
         try {
-            sendDatabaseCommand("set buono:" + buono.getId() + ":valore " + buono.getValore());
-            sendDatabaseCommand("set buono:" + buono.getId() + ":tipologia " + buono.getTipologia());
-            sendDatabaseCommand("set buono:" + buono.getId() + ":dataCreazione " + buono.getDataCreazione().toString());
+            sendDatabaseCommand("set buono:" + buono.getId() + ":valore " + new_buono.getValore());
+            sendDatabaseCommand("set buono:" + buono.getId() + ":tipologia " + new_buono.getTipologia());
+            sendDatabaseCommand("set buono:" + buono.getId() + ":dataCreazione " + new_buono.getDataCreazione().toString());
             sendDatabaseCommand("set buono:" + buono.getId() + ":dataConsumo ");
         } catch (IOException e) {
             throw new Exception("ERROR: Failed to create Buono with ID " + buono.getId()+ ". " + e.getMessage());
