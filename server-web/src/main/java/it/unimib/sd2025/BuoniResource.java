@@ -2,7 +2,6 @@ package it.unimib.sd2025;
 
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
-import jakarta.json.bind.JsonbConfig;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.PathParam;
@@ -13,6 +12,8 @@ import jakarta.ws.rs.core.Response.Status;
 
 @Path("buoni")
 public class BuoniResource {
+    static Jsonb jsonb = JsonbBuilder.create(); 
+
     @GET
     @Path("/{cf}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -23,12 +24,6 @@ public class BuoniResource {
 
             System.out.println("Buoni retrieved for user " + cf + ": " + buoni);
 
-            if (buoni.startsWith("ERROR")) {
-                return Response.status(Status.NOT_FOUND)
-                        .entity(buoni)
-                        .build();
-            }
-
             String[] ids = buoni.split(":");
             Buono[] buoniList = new Buono[ids.length];
             for (int i = 0; i < ids.length; i++) {
@@ -36,23 +31,14 @@ public class BuoniResource {
                     continue; // Skip empty IDs
                 }
                 BuonoRepository buonoRepo = new BuonoRepository();
-                String buonoJson = buonoRepo.getBuono(ids[i]);
-                if (buonoJson.startsWith("ERROR")) {
-                    return Response.status(Status.NOT_FOUND)
-                            .entity("Buono with ID " + ids[i] + " not found")
-                            .build();
-                }
-                JsonbConfig config = new JsonbConfig()
-                    .withNullValues(true);
-
-                Jsonb jsonb = JsonbBuilder.create(config);
-                buoniList[i] = jsonb.fromJson(buonoJson, Buono.class);
+                Buono buono = buonoRepo.getBuono(ids[i]);
+                buoniList[i] = buono;
             }
 
             return Response.ok(JsonbBuilder.create().toJson(buoniList)).build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                    .entity("Buono not found: ")
+                    .entity(e.getMessage())
                     .build();
         }
     }
