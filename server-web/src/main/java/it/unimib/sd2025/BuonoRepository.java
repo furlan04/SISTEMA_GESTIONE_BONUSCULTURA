@@ -41,7 +41,7 @@ public class BuonoRepository extends DatabaseConnection {
         } catch (IOException e) {
             throw new Exception("ERROR: Failed to create Buono with ID " + buono.getId()+ ". " + e.getMessage());
         }
-        return buono;
+        return new_buono;
     }
 
     public Buono getBuono(String id) throws IOException, Exception {
