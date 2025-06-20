@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unimib.sd2025.DatabaseConnection;
-import it.unimib.sd2025.SaldoRimasto;
-import it.unimib.sd2025.Utente;
+import it.unimib.sd2025.Model.SaldoRimasto;
+import it.unimib.sd2025.Model.Utente;
 
 public class UtenteRepository implements Repository<Utente> {
     private DatabaseConnection dbConnection = new DatabaseConnection();
@@ -166,17 +166,22 @@ public class UtenteRepository implements Repository<Utente> {
         if (buoni.startsWith("ERROR")) {
             throw new IOException("Failed to retrieve user's buoni for Codice Fiscale " + cf);
         }
-        double saldoRimasto = 0.0;
+        double saldo_consumato = 0.0;
+        double saldo_non_consumato = 0.0;
         for (String id : buoni.split(":")) {
             if (!(id == null || id.isEmpty())) {
                 String saldo = dbConnection.sendDatabaseCommand("get buono:" + id + ":valore");
                 if (saldo.startsWith("ERROR")) {
                     throw new IOException("Failed to retrieve value for Buono with ID " + id);
                 }
-                saldoRimasto += Double.parseDouble(saldo);
+                if(dbConnection.sendDatabaseCommand("get buono:" + id + ":dataConsumo").isEmpty()) {
+                    saldo_non_consumato += Double.parseDouble(saldo);
+                } else {
+                    saldo_consumato += Double.parseDouble(saldo);
+                }
             }
         }
-        return new SaldoRimasto(500 - saldoRimasto);
+        return new SaldoRimasto(500 - saldo_consumato - saldo_non_consumato, saldo_consumato, saldo_non_consumato);
     }
     
 }

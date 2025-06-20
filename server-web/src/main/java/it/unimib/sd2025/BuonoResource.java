@@ -3,6 +3,8 @@ package it.unimib.sd2025;
 import java.io.IOException;
 import java.sql.Date;
 
+import it.unimib.sd2025.Model.Buono;
+import it.unimib.sd2025.Model.SaldoRimasto;
 import it.unimib.sd2025.Repository.BuonoRepository;
 import it.unimib.sd2025.Repository.UtenteRepository;
 import jakarta.json.bind.Jsonb;

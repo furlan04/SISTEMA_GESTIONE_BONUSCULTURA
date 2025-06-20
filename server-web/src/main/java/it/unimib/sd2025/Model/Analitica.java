@@ -1,4 +1,4 @@
-package it.unimib.sd2025;
+package it.unimib.sd2025.Model;
 
 import jakarta.json.bind.annotation.JsonbProperty;
 

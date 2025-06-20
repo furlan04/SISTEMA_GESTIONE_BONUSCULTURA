@@ -3,9 +3,9 @@ package it.unimib.sd2025.Repository;
 import java.io.IOException;
 import java.sql.Date;
 
-import it.unimib.sd2025.Buono;
 import it.unimib.sd2025.DatabaseConnection;
 import it.unimib.sd2025.Id;
+import it.unimib.sd2025.Model.Buono;
 
 public class BuonoRepository implements Repository<Buono> {
     private DatabaseConnection dbConnection = new DatabaseConnection();
