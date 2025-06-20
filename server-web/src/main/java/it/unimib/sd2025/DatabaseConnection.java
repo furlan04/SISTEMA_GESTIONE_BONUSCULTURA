@@ -6,18 +6,38 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class DatabaseConnection {
+public class DatabaseConnection implements AutoCloseable {
     private static final String DB_HOST = "localhost";
     private static final int DB_PORT = 3030;
+    private Socket socket;
+    private PrintWriter out;
+    private BufferedReader in;
 
+    public DatabaseConnection() {
+        try {
+            this.socket = new Socket(DB_HOST, DB_PORT);
+            this.out = new PrintWriter(socket.getOutputStream(), true);
+            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        } catch (IOException e) {
+            System.err.println("ERROR: Unable to connect to the database at " + DB_HOST + ":" + DB_PORT);
+            e.printStackTrace();
+        }
+    }
 
     public String sendDatabaseCommand(String command) throws IOException {
-        try (Socket socket = new Socket(DB_HOST, DB_PORT);
-                PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
-                BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()))) {
+        out.println(command);
+        return in.readLine();
+    }
 
-            out.println(command);
-            return in.readLine();
+    @Override
+    public void close() {
+        try {
+            if (in != null) in.close();
+            if (out != null) out.close();
+            if (socket != null && !socket.isClosed()) socket.close();
+        } catch (IOException e) {
+            System.err.println("ERROR: Failed to close database connection");
+            e.printStackTrace();
         }
     }
 }

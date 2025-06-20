@@ -89,6 +89,33 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 ---
 
+### GET `/utente/{cf}/totaleConsumato`
+
+**Descrizione**: Restituisce il totale consumato dall'utente identificato dal codice fiscale.
+
+**Parametri**:
+
+- `{cf}`: Codice fiscale dell’utente.
+
+**Header**:
+
+- Nessuno.
+
+**Body richiesta**:
+
+- Nessuno.
+
+**Risposta**:
+
+- Oggetto JSON con il totale consumato.
+
+**Codici di stato restituiti**:
+
+- 200 OK: successo.
+- 404 Not Found: utente non trovato.
+
+---
+
 ## `/analitica`
 
 ### GET `/analitica`
@@ -291,4 +318,47 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 - 200 OK: successo.
 - 400 Bad Request: errore nei dati inviati o saldo insufficiente.
-- 404 Not Found: utente o buono non
+- 404 Not Found: utente o buono non trovato.
+
+---
+
+## Esempi di oggetti JSON
+
+Di seguito sono riportati alcuni esempi di oggetti JSON utilizzati nelle richieste e risposte.
+
+### Utente
+
+```json
+{
+  "nome": "Mario",
+  "cognome": "Rossi",
+  "email": "mario.rossi@email.com",
+  "codiceFiscale": "RSSMRA80A01H501U"
+}
+```
+
+### Buono
+
+```json
+{
+  "id": "12",
+  "valore": 50,
+  "tipologia": "buono cultura",
+  "dataCreazione": "2025-06-20",
+  "dataConsumo": null
+}
+```
+
+### Statistiche analitiche
+
+```json
+{
+  "utentiRegistrati": 1000,
+  "buoniTotali": 5000,
+  "buoniConsumati": 3000,
+  "buoniNonConsumati": 2000,
+  "contributiSpesi": 15000,
+  "contributiAssegnati": 20000,
+  "contributiDisponibili": 5000
+}
+```

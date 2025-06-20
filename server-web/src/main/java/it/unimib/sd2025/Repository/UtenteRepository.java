@@ -1,27 +1,32 @@
-package it.unimib.sd2025;
+package it.unimib.sd2025.Repository;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UtenteRepository extends DatabaseConnection {
+import it.unimib.sd2025.DatabaseConnection;
+import it.unimib.sd2025.SaldoRimasto;
+import it.unimib.sd2025.Utente;
 
-    public UtenteRepository() {
-        super();
+public class UtenteRepository implements Repository<Utente> {
+    private DatabaseConnection dbConnection = new DatabaseConnection();
+    public UtenteRepository(DatabaseConnection dbConnection) {
+        this.dbConnection = dbConnection;
+        
     }
-    
-    public boolean existsUtente(String cf) throws IOException {
+    @Override
+    public boolean exists(String cf) throws IOException {
         if (cf == null || cf.isEmpty()) {
             throw new IllegalArgumentException("Codice Fiscale cannot be null or empty");
         }
-        String response = sendDatabaseCommand("exists utente:" + cf);
+        String response = dbConnection.sendDatabaseCommand("exists utente:" + cf);
         if (response.startsWith("ERROR")) {
             throw new IOException("User with Codice Fiscale " + cf + " does not exist");
         }
         return "true".equals(response);
     }
-
-    public Utente createUtente(Utente utente) throws IOException {
+    @Override
+    public Utente create(Utente utente) throws IOException {
         if (utente.getCodiceFiscale() == null || utente.getCodiceFiscale().isEmpty()
                 || utente.getNome() == null || utente.getNome().isEmpty()
                 || utente.getCognome() == null || utente.getCognome().isEmpty()
@@ -29,13 +34,13 @@ public class UtenteRepository extends DatabaseConnection {
             throw new IllegalArgumentException("Codice Fiscale, Nome, Cognome, and Email cannot be null or empty");
         }
         try {
-            if (existsUtente(utente.getCodiceFiscale())) {
+            if (exists(utente.getCodiceFiscale())) {
                 throw new IOException("User with Codice Fiscale " + utente.getCodiceFiscale() + " already exists");
             }
-            sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":nome " + utente.getNome());
-            sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":cognome " + utente.getCognome());
-            sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":email " + utente.getEmail());
-            sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":buoni ");
+            dbConnection.sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":nome " + utente.getNome());
+            dbConnection.sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":cognome " + utente.getCognome());
+            dbConnection.sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":email " + utente.getEmail());
+            dbConnection.sendDatabaseCommand("set utente:" + utente.getCodiceFiscale() + ":buoni ");
 
         } catch (IOException e) {
             throw new IOException(
@@ -43,19 +48,19 @@ public class UtenteRepository extends DatabaseConnection {
         }
         return utente;
     }
-
-    public Utente getUtente(String cf) throws IOException {
+    @Override
+    public Utente get(String cf) throws IOException {
         if (cf == null || cf.isEmpty()) {
             throw new IllegalArgumentException("Codice Fiscale cannot be null or empty");
         }
 
-        if (!existsUtente(cf)) {
+        if (!exists(cf)) {
             throw new IOException("User with Codice Fiscale " + cf + " does not exist");
         }
 
-        String nome = sendDatabaseCommand("get utente:" + cf + ":nome");
-        String cognome = sendDatabaseCommand("get utente:" + cf + ":cognome");
-        String email = sendDatabaseCommand("get utente:" + cf + ":email");
+        String nome = dbConnection.sendDatabaseCommand("get utente:" + cf + ":nome");
+        String cognome = dbConnection.sendDatabaseCommand("get utente:" + cf + ":cognome");
+        String email = dbConnection.sendDatabaseCommand("get utente:" + cf + ":email");
 
         if (nome.startsWith("ERROR") || cognome.startsWith("ERROR") || email.startsWith("ERROR")) {
             throw new IOException("Failed to retrieve user information for Codice Fiscale " + cf);
@@ -68,10 +73,10 @@ public class UtenteRepository extends DatabaseConnection {
         if (cf == null || cf.isEmpty() || buonoId == null || buonoId.isEmpty()) {
             throw new IllegalArgumentException("Codice Fiscale and Buono ID cannot be null or empty");
         }
-        if (!existsUtente(cf)) {
+        if (!exists(cf)) {
             throw new IOException("User with Codice Fiscale " + cf + " does not exist");
         }
-        String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
+        String buoni = dbConnection.sendDatabaseCommand("get utente:" + cf + ":buoni");
         if (buoni.startsWith("ERROR")) {
             throw new IOException("Failed to retrieve user's buoni for Codice Fiscale " + cf);
         }
@@ -86,7 +91,7 @@ public class UtenteRepository extends DatabaseConnection {
             }
             buoni = buoni + ":" + buonoId;
         }
-        String buoniAgg = sendDatabaseCommand("set utente:" + cf + ":buoni " + buoni);
+        String buoniAgg = dbConnection.sendDatabaseCommand("set utente:" + cf + ":buoni " + buoni);
         return buoniAgg;
     }
 
@@ -94,10 +99,10 @@ public class UtenteRepository extends DatabaseConnection {
         if (cf == null || cf.isEmpty()) {
             throw new IllegalArgumentException("Codice Fiscale cannot be null or empty");
         }
-        if (!existsUtente(cf)) {
+        if (!exists(cf)) {
             throw new IOException("User with Codice Fiscale " + cf + " does not exist");
         }
-        String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
+        String buoni = dbConnection.sendDatabaseCommand("get utente:" + cf + ":buoni");
         if (buoni.startsWith("ERROR")) {
             throw new IOException("Failed to retrieve user's buoni for Codice Fiscale " + cf);
         }
@@ -109,11 +114,11 @@ public class UtenteRepository extends DatabaseConnection {
             throw new IllegalArgumentException("Codice Fiscale and Buono ID cannot be null or empty");
         }
 
-        if (!existsUtente(cf)) {
+        if (!exists(cf)) {
             throw new IOException("User with Codice Fiscale " + cf + " does not exist");
         }
 
-        String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
+        String buoni = dbConnection.sendDatabaseCommand("get utente:" + cf + ":buoni");
         if (buoni.startsWith("ERROR")) {
             throw new IOException("Failed to retrieve user's buoni for Codice Fiscale " + cf);
         }
@@ -142,9 +147,9 @@ public class UtenteRepository extends DatabaseConnection {
 
         // Set or delete the field depending on remaining content
         if (newBuoni.isEmpty()) {
-            sendDatabaseCommand("del utente:" + cf + ":buoni");
+            dbConnection.sendDatabaseCommand("del utente:" + cf + ":buoni");
         } else {
-            sendDatabaseCommand("set utente:" + cf + ":buoni " + newBuoni);
+            dbConnection.sendDatabaseCommand("set utente:" + cf + ":buoni " + newBuoni);
         }
 
         return newBuoni;
@@ -154,17 +159,17 @@ public class UtenteRepository extends DatabaseConnection {
         if (cf == null || cf.isEmpty()) {
             throw new IllegalArgumentException("Codice Fiscale cannot be null or empty");
         }
-        if (!existsUtente(cf)) {
+        if (!exists(cf)) {
             throw new IOException("User with Codice Fiscale " + cf + " does not exist");
         }
-        String buoni = sendDatabaseCommand("get utente:" + cf + ":buoni");
+        String buoni = dbConnection.sendDatabaseCommand("get utente:" + cf + ":buoni");
         if (buoni.startsWith("ERROR")) {
             throw new IOException("Failed to retrieve user's buoni for Codice Fiscale " + cf);
         }
         double saldoRimasto = 0.0;
         for (String id : buoni.split(":")) {
             if (!(id == null || id.isEmpty())) {
-                String saldo = sendDatabaseCommand("get buono:" + id + ":valore");
+                String saldo = dbConnection.sendDatabaseCommand("get buono:" + id + ":valore");
                 if (saldo.startsWith("ERROR")) {
                     throw new IOException("Failed to retrieve value for Buono with ID " + id);
                 }
