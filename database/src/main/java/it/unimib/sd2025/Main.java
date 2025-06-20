@@ -70,7 +70,6 @@ public class Main {
                         out.println("bye");
                         break;
                     }
-                    out.println(inputLine);
 
                 }
 

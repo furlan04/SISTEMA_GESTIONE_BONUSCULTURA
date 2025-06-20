@@ -1,18 +1,23 @@
-package it.unimib.sd2025;
+package it.unimib.sd2025.Repository;
 
 import java.io.IOException;
 import java.sql.Date;
 
-public class BuonoRepository extends DatabaseConnection {
-    public BuonoRepository() {
-        super();
-    }
+import it.unimib.sd2025.Buono;
+import it.unimib.sd2025.DatabaseConnection;
+import it.unimib.sd2025.Id;
 
-    public boolean existsBuono(String id) throws IOException {
+public class BuonoRepository implements Repository<Buono> {
+    private DatabaseConnection dbConnection = new DatabaseConnection();
+    public BuonoRepository(DatabaseConnection dbConnection) {
+        this.dbConnection = dbConnection;
+    }
+    @Override
+    public boolean exists(String id) throws IOException {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException( "ERROR: ID cannot be null or empty");
         }
-        String response = sendDatabaseCommand("exists buono:" + id);
+        String response = dbConnection.sendDatabaseCommand("exists buono:" + id);
         if (response.startsWith("ERROR")) {
             throw new IOException( "ERROR: Buono with ID " + id + " does not exist");
         }
@@ -24,39 +29,39 @@ public class BuonoRepository extends DatabaseConnection {
             throw new IOException("ERROR: Unexpected response from database for Buono with ID " + id);
         }
     }
-
-    public Buono createBuono(Buono buono) throws Exception, IllegalArgumentException, IOException{
+    @Override
+    public Buono create(Buono buono) throws Exception, IllegalArgumentException, IOException{
         if (buono.getTipologia() == null || buono.getTipologia().isEmpty()){
             throw new IllegalArgumentException( "ERROR: ID, Tipologia, Data Creazione cannot be null or empty");
         }
         Buono new_buono = new Buono(buono.getValore(), buono.getTipologia());
-        while (existsBuono(new_buono.getId())) {
+        while (exists(new_buono.getId())) {
             new_buono.setId(Id.getNextId());
         }
         try {
-            sendDatabaseCommand("set buono:" + new_buono.getId() + ":valore " + new_buono.getValore());
-            sendDatabaseCommand("set buono:" + new_buono.getId() + ":tipologia " + new_buono.getTipologia());
-            sendDatabaseCommand("set buono:" + new_buono.getId() + ":dataCreazione " + new_buono.getDataCreazione().toString());
-            sendDatabaseCommand("set buono:" + new_buono.getId() + ":dataConsumo ");
+            dbConnection.sendDatabaseCommand("set buono:" + new_buono.getId() + ":valore " + new_buono.getValore());
+            dbConnection.sendDatabaseCommand("set buono:" + new_buono.getId() + ":tipologia " + new_buono.getTipologia());
+            dbConnection.sendDatabaseCommand("set buono:" + new_buono.getId() + ":dataCreazione " + new_buono.getDataCreazione().toString());
+            dbConnection.sendDatabaseCommand("set buono:" + new_buono.getId() + ":dataConsumo ");
         } catch (IOException e) {
             throw new Exception("ERROR: Failed to create Buono with ID " + buono.getId()+ ". " + e.getMessage());
         }
         return new_buono;
     }
-
-    public Buono getBuono(String id) throws IOException, Exception {
+    @Override
+    public Buono get(String id) throws IOException, Exception {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ERROR: ID cannot be null or empty");
         }
 
-        if (!existsBuono(id)) {
+        if (!exists(id)) {
             throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
 
-        String valoreStr = sendDatabaseCommand("get buono:" + id + ":valore");
-        String tipologia = sendDatabaseCommand("get buono:" + id + ":tipologia");
-        String dataCreazioneStr = sendDatabaseCommand("get buono:" + id + ":dataCreazione");
-        String dataScadenzaStr = sendDatabaseCommand("get buono:" + id + ":dataConsumo");
+        String valoreStr = dbConnection.sendDatabaseCommand("get buono:" + id + ":valore");
+        String tipologia = dbConnection.sendDatabaseCommand("get buono:" + id + ":tipologia");
+        String dataCreazioneStr = dbConnection.sendDatabaseCommand("get buono:" + id + ":dataCreazione");
+        String dataScadenzaStr = dbConnection.sendDatabaseCommand("get buono:" + id + ":dataConsumo");
 
         // Controlla errori nella risposta dal DB
         if (valoreStr.startsWith("ERROR") || tipologia.startsWith("ERROR") ||
@@ -86,16 +91,16 @@ public class BuonoRepository extends DatabaseConnection {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ERROR: ID cannot be null or empty");
         }
-        if (!existsBuono(id)) {
+        if (!exists(id)) {
             throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
-        if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
+        if(!dbConnection.sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
             throw new Exception("ERROR: Buono with ID " + id + " has been consumed and cannot be deleted");
         }
-        String valore = sendDatabaseCommand("delete buono:" + id + ":valore");
-        String tipologia = sendDatabaseCommand("delete buono:" + id + ":tipologia");
-        String dataCreazione = sendDatabaseCommand("delete buono:" + id + ":dataCreazione");
-        sendDatabaseCommand("delete buono:" + id + ":dataConsumo");
+        String valore = dbConnection.sendDatabaseCommand("delete buono:" + id + ":valore");
+        String tipologia = dbConnection.sendDatabaseCommand("delete buono:" + id + ":tipologia");
+        String dataCreazione = dbConnection.sendDatabaseCommand("delete buono:" + id + ":dataCreazione");
+        dbConnection.sendDatabaseCommand("delete buono:" + id + ":dataConsumo");
         Buono buono = new Buono(id, Double.parseDouble(valore), tipologia, Date.valueOf(dataCreazione),
                 null);
         
@@ -106,15 +111,15 @@ public class BuonoRepository extends DatabaseConnection {
         if (id == null || id.isEmpty()) {
             throw new IllegalArgumentException("ERROR: ID cannot be null or empty");
         }
-        if (!existsBuono(id)) {
+        if (!exists(id)) {
             throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
-        if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
+        if(!dbConnection.sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
             throw new Exception("ERROR: Buono with ID " + id + " has already been consumed");
         }
         String dataConsumo = new Date(System.currentTimeMillis()).toString();
-        sendDatabaseCommand("set buono:" + id + ":dataConsumo " + dataConsumo);
-        Buono buono = getBuono(id);
+        dbConnection.sendDatabaseCommand("set buono:" + id + ":dataConsumo " + dataConsumo);
+        Buono buono = get(id);
         if (buono == null) {
             throw new IOException("ERROR: Buono with ID " + id + " could not be retrieved after consumption");
         }
@@ -125,16 +130,16 @@ public class BuonoRepository extends DatabaseConnection {
         if (id == null || id.isEmpty() || updatedBuono == null) {
             throw new IllegalArgumentException("ERROR: ID and updated Buono cannot be null or empty");
         }
-        if (!existsBuono(id)) {
+        if (!exists(id)) {
             throw new Exception("ERROR: Buono with ID " + id + " does not exist");
         }
-        if(!sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
+        if(!dbConnection.sendDatabaseCommand("get buono:" + id + ":dataConsumo").equals("")) {
             throw new Exception("ERROR: Buono with ID " + id + " has already been consumed and cannot be modified");
         }
         
-        sendDatabaseCommand("set buono:" + id + ":valore " + updatedBuono.getValore());
-        sendDatabaseCommand("set buono:" + id + ":tipologia " + updatedBuono.getTipologia());
+        dbConnection.sendDatabaseCommand("set buono:" + id + ":valore " + updatedBuono.getValore());
+        dbConnection.sendDatabaseCommand("set buono:" + id + ":tipologia " + updatedBuono.getTipologia());
 
-        return getBuono(id);
+        return get(id);
     }
 }
