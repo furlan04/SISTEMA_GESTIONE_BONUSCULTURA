@@ -12,7 +12,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     return;
   }
 
-  // Precompila il form con i dati attuali del buono
   try {
     const response = await fetch(
       `http://localhost:8080/buono/${encodeURIComponent(id)}`
@@ -35,7 +34,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     const valore = document.getElementById("valore").value.trim();
     const tipologia = document.getElementById("tipologia").value.trim();
 
-    // Controllo valore valido
     if (!valore || isNaN(valore) || Number(valore) <= 0) {
       msgDiv.textContent = "Inserisci un importo valido (numero positivo).";
       msgDiv.style.color = "#b00020";

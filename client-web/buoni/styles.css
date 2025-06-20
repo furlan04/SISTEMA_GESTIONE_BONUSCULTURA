@@ -1,4 +1,3 @@
-/* Sfondo e font coerenti con la login */
 body {
   background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
   font-family: "Segoe UI", Arial, sans-serif;
@@ -18,7 +17,6 @@ h2 {
   margin-bottom: 30px;
 }
 
-/* Lista buoni */
 .lista-buoni {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -26,7 +24,6 @@ h2 {
   padding: 10px;
 }
 
-/* Card del buono */
 .buono {
   background: #fff;
   border-radius: 16px;
@@ -50,7 +47,6 @@ h2 {
   color: #455a64;
 }
 
-/* Bottone link */
 .buono a.button {
   display: inline-block;
   margin-top: 12px;

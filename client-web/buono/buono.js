@@ -1,5 +1,3 @@
-// buono.js
-
 document.addEventListener("DOMContentLoaded", () => {
   const params = new URLSearchParams(location.search);
   const id = params.get("id");
@@ -8,9 +6,6 @@ document.addEventListener("DOMContentLoaded", () => {
   fetchBuono(id);
 });
 
-/**
- * Effettua la fetch per ottenere i dati del buono.
- */
 function fetchBuono(id) {
   const url = `http://localhost:8080/buono/${encodeURIComponent(id)}`;
 
@@ -23,18 +18,13 @@ function fetchBuono(id) {
     .catch((err) => showError(err.message));
 }
 
-/**
- * Mostra i dati del buono nella pagina.
- */
 function renderBuono(buono) {
   const container = document.getElementById("buono-container");
 
-  // Determina se il buono è già stato consumato
   const isConsumed = !(
     buono.dataConsumo === null || buono.dataConsumo === undefined
   );
 
-  // Crea il contenuto per la data di consumo o il bottone
   const consumoContent = isConsumed
     ? `<p><strong>Data Consumo:</strong> ${formatDate(buono.dataConsumo)}</p>`
     : `<button id="consuma-buono" class="button-consume" data-id="${buono.id}">
@@ -42,7 +32,6 @@ function renderBuono(buono) {
          Consuma Buono
        </button>`;
 
-  // Mostra il bottone elimina solo se NON è consumato
   const modifyButtonHtml = !isConsumed
     ? `<button id="modify-buono" class="button-modify">
          <span class="button-icon">✏️</span>
@@ -74,14 +63,12 @@ function renderBuono(buono) {
     </div>
   `;
 
-  // Aggiungi event listener per il bottone consuma se presente
   if (!isConsumed) {
     setupConsumaButton(buono.id);
     const deleteBtn = document.getElementById("delete-buono");
     if (deleteBtn) {
       deleteBtn.addEventListener("click", () => deleteBuono(buono.id));
     }
-    // Event listener per modifica
     const modifyBtn = document.getElementById("modify-buono");
     if (modifyBtn) {
       modifyBtn.addEventListener("click", () => {
@@ -93,9 +80,6 @@ function renderBuono(buono) {
   }
 }
 
-/**
- * Configura il bottone per consumare il buono.
- */
 function setupConsumaButton(buonoId) {
   const btn = document.getElementById("consuma-buono");
   if (btn) {
@@ -103,9 +87,6 @@ function setupConsumaButton(buonoId) {
   }
 }
 
-/**
- * Effettua la chiamata API per consumare il buono.
- */
 function consumaBuono(buonoId) {
   const btn = document.getElementById("consuma-buono");
   const cf = sessionStorage.getItem("codiceFiscale");
@@ -115,7 +96,6 @@ function consumaBuono(buonoId) {
     return;
   }
 
-  // Disabilita il bottone durante la chiamata
   btn.disabled = true;
   btn.innerHTML = `<span class="button-icon">⏳</span> Consumando...`;
 
@@ -134,21 +114,16 @@ function consumaBuono(buonoId) {
       return response.json();
     })
     .then((data) => {
-      // Ricarica i dati del buono per mostrare la data di consumo aggiornata
       fetchBuono(buonoId);
       showSuccessMessage("Buono consumato con successo!");
     })
     .catch((err) => {
       showError(err.message);
-      // Ripristina il bottone in caso di errore
       btn.disabled = false;
       btn.innerHTML = `<span class="button-icon">🎫</span> Consuma Buono`;
     });
 }
 
-/**
- * Mostra un messaggio di successo.
- */
 function showSuccessMessage(msg) {
   const container = document.getElementById("buono-container");
   const successDiv = document.createElement("div");
@@ -160,7 +135,6 @@ function showSuccessMessage(msg) {
   `;
   container.insertBefore(successDiv, container.firstChild);
 
-  // Rimuovi il messaggio dopo 3 secondi
   setTimeout(() => {
     if (successDiv.parentNode) {
       successDiv.parentNode.removeChild(successDiv);
@@ -168,9 +142,6 @@ function showSuccessMessage(msg) {
   }, 3000);
 }
 
-/**
- * Mostra un messaggio di errore.
- */
 function showError(msg) {
   const container = document.getElementById("buono-container");
   container.innerHTML = `
@@ -187,17 +158,11 @@ function showError(msg) {
     </div>`;
 }
 
-/**
- * Formatta la data secondo convenzione italiana.
- */
 function formatDate(isoDate) {
   const dt = new Date(isoDate);
   return dt.toLocaleDateString("it-IT");
 }
 
-/**
- * Capitalizza la prima lettera della stringa.
- */
 function capitalize(str) {
   if (!str) return "";
   return str.charAt(0).toUpperCase() + str.slice(1);
@@ -226,11 +191,7 @@ function deleteBuono(buonoId) {
   });
 }
 
-/**
- * Mostra un popup di conferma personalizzato.
- */
 function showConfirm(message, onConfirm) {
-  // Rimuovi eventuali popup già presenti
   const oldPopup = document.getElementById("custom-confirm-popup");
   if (oldPopup) oldPopup.remove();
 
