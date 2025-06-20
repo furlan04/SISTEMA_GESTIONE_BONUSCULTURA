@@ -1,5 +1,7 @@
 package it.unimib.sd2025;
 
+import it.unimib.sd2025.Repository.BuonoRepository;
+import it.unimib.sd2025.Repository.UtenteRepository;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.ws.rs.GET;
@@ -18,8 +20,8 @@ public class BuoniResource {
     @Path("/{cf}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll(@PathParam("cf") String cf) {
-        try {
-            UtenteRepository utenteRepo = new UtenteRepository();
+        try (DatabaseConnection dbConnection = new DatabaseConnection()) {
+            UtenteRepository utenteRepo = new UtenteRepository(dbConnection);
             String buoni = utenteRepo.getBuoniUtente(cf);
 
             System.out.println("Buoni retrieved for user " + cf + ": " + buoni);
@@ -30,8 +32,8 @@ public class BuoniResource {
                 if (ids[i].isEmpty()) {
                     continue; // Skip empty IDs
                 }
-                BuonoRepository buonoRepo = new BuonoRepository();
-                Buono buono = buonoRepo.getBuono(ids[i]);
+                BuonoRepository buonoRepo = new BuonoRepository(dbConnection);
+                Buono buono = buonoRepo.get(ids[i]);
                 buoniList[i] = buono;
             }
 

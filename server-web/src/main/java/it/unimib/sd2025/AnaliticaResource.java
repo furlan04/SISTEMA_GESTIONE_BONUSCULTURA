@@ -18,8 +18,7 @@ public class AnaliticaResource {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        try {
-            DatabaseConnection dbConnection = new DatabaseConnection();
+        try (DatabaseConnection dbConnection = new DatabaseConnection()){
 
             String allKeysResponse = dbConnection.sendDatabaseCommand("getallkeys");
             System.out.println("All keys retrieved: " + allKeysResponse);
