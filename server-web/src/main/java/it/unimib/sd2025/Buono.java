@@ -12,7 +12,7 @@ public class Buono {
     private Date dataConsumo = null;
 
     public Buono(double valore, String tipologia) {
-        this.id = String.valueOf(Id.getNextId());
+        this.id = Id.getNextId();
         this.valore = valore;
         this.tipologia = tipologia;
         this.dataCreazione = new Date(System.currentTimeMillis());

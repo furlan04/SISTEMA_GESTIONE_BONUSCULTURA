@@ -31,7 +31,7 @@ public class BuonoRepository extends DatabaseConnection {
         }
         Buono new_buono = new Buono(buono.getValore(), buono.getTipologia());
         while (existsBuono(new_buono.getId())) {
-            new_buono.setId(String.valueOf(Id.getNextId()));
+            new_buono.setId(Id.getNextId());
         }
         try {
             sendDatabaseCommand("set buono:" + new_buono.getId() + ":valore " + new_buono.getValore());

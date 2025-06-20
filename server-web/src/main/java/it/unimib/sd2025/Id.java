@@ -8,18 +8,14 @@ public class Id {
         // Private constructor to prevent instantiation
         // This class is intended to be a utility class for generating unique IDs.
     }
-    public static int getNextId() {
+    public static String getNextId() {
         synchronized (_lock) {
-            return currentId++;
+            return String.valueOf(currentId++);
         }
     }
     
     public static void reset() {
         currentId = 0;
     }
-    public static void setCurrentId(int id) {
-        synchronized (_lock) {
-            currentId = id;
-        }
-    }
+    
 }       
