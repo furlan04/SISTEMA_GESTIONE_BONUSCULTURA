@@ -2,6 +2,7 @@ package it.unimib.sd2025;
 
 import java.util.Collections;
 
+import it.unimib.sd2025.Model.Analitica;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
 import jakarta.ws.rs.GET;

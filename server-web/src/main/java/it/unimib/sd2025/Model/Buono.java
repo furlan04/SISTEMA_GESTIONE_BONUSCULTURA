@@ -1,7 +1,8 @@
-package it.unimib.sd2025;
+package it.unimib.sd2025.Model;
 
 import java.sql.Date;
 
+import it.unimib.sd2025.Id;
 import jakarta.json.bind.annotation.JsonbProperty;
 
 public class Buono {

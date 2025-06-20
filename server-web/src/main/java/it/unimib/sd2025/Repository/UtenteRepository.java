@@ -5,8 +5,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import it.unimib.sd2025.DatabaseConnection;
-import it.unimib.sd2025.SaldoRimasto;
-import it.unimib.sd2025.Utente;
+import it.unimib.sd2025.Model.SaldoRimasto;
+import it.unimib.sd2025.Model.Utente;
 
 public class UtenteRepository implements Repository<Utente> {
     private DatabaseConnection dbConnection = new DatabaseConnection();

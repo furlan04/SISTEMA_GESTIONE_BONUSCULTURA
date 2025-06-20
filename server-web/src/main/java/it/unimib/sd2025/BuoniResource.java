@@ -1,5 +1,6 @@
 package it.unimib.sd2025;
 
+import it.unimib.sd2025.Model.Buono;
 import it.unimib.sd2025.Repository.BuonoRepository;
 import it.unimib.sd2025.Repository.UtenteRepository;
 import jakarta.json.bind.Jsonb;

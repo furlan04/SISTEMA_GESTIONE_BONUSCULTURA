@@ -4,6 +4,8 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+import it.unimib.sd2025.Model.SaldoRimasto;
+import it.unimib.sd2025.Model.Utente;
 import it.unimib.sd2025.Repository.UtenteRepository;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
