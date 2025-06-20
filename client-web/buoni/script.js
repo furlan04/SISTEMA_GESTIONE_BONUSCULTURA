@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function mostraBuoni(buoni) {
   const lista = document.getElementById("buoni-lista");
-
+  buoni.sort((a, b) => new Date(b.dataCreazione) - new Date(a.dataCreazione));
   if (!buoni.length) {
     lista.innerHTML = "<p>Nessun buono disponibile.</p>";
     return;
