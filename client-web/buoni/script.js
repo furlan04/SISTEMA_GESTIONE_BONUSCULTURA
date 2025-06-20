@@ -6,7 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
     return;
   }
 
-  mostraSaldoRimanente(codiceFiscale); // <--- AGGIUNTA QUI
+  mostraSaldoRimanente(codiceFiscale);
+  mostraContributoConsumato(codiceFiscale);
+  mostraContributoNonConsumato(codiceFiscale);
 
   fetch(`http://localhost:8080/buoni/${codiceFiscale}`)
     .then((response) => {
@@ -25,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function mostraBuoni(buoni) {
   const lista = document.getElementById("buoni-lista");
-  buoni.sort((a, b) => new Date(b.dataCreazione) - new Date(a.dataCreazione));
+
   if (!buoni.length) {
     lista.innerHTML = "<p>Nessun buono disponibile.</p>";
     return;
@@ -58,7 +60,6 @@ function capitalize(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-// --- FUNZIONE AGGIUNTA ---
 function mostraSaldoRimanente(codiceFiscale) {
   fetch(
     `http://localhost:8080/utente/${encodeURIComponent(codiceFiscale)}/saldo`
@@ -68,7 +69,6 @@ function mostraSaldoRimanente(codiceFiscale) {
       return response.json();
     })
     .then((data) => {
-      // Usa data.saldo invece di data
       document.getElementById(
         "saldo-rimanente"
       ).innerHTML = `<strong>Saldo rimanente:</strong> €${Number(
@@ -78,5 +78,54 @@ function mostraSaldoRimanente(codiceFiscale) {
     .catch((error) => {
       document.getElementById("saldo-rimanente").innerHTML =
         "Errore nel recupero del saldo rimanente.";
+    });
+}
+
+function mostraContributoConsumato(codiceFiscale) {
+  fetch(
+    `http://localhost:8080/utente/${encodeURIComponent(
+      codiceFiscale
+    )}/totaleConsumato`
+  )
+    .then((response) => {
+      if (!response.ok)
+        throw new Error("Errore nel recupero del contributo consumato");
+      return response.json();
+    })
+    .then((data) => {
+      document.getElementById(
+        "contributo-consumato"
+      ).innerHTML = `<strong>Contributo usato per buoni consumati:</strong> €${Number(
+        data
+      ).toFixed(2)}`;
+    })
+    .catch((error) => {
+      document.getElementById("contributo-consumato").innerHTML =
+        "Errore nel recupero del contributo consumato.";
+    });
+}
+
+function mostraContributoNonConsumato(codiceFiscale) {
+  fetch(`http://localhost:8080/buoni/${encodeURIComponent(codiceFiscale)}`)
+    .then((response) => {
+      if (!response.ok) throw new Error("Errore nel recupero dei buoni");
+      return response.json();
+    })
+    .then((buoni) => {
+      let nonConsumato = 0;
+      buoni.forEach((buono) => {
+        if (!buono.dataConsumo) {
+          nonConsumato += Number(buono.valore);
+        }
+      });
+      document.getElementById(
+        "contributo-non-consumato"
+      ).innerHTML = `<strong>Contributo usato per buoni non consumati:</strong> €${nonConsumato.toFixed(
+        2
+      )}`;
+    })
+    .catch((error) => {
+      document.getElementById("contributo-non-consumato").innerHTML =
+        "Errore nel recupero del contributo non consumato.";
     });
 }
