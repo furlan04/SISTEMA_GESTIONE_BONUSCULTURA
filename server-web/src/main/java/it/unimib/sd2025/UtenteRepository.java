@@ -9,7 +9,7 @@ public class UtenteRepository extends DatabaseConnection {
     public UtenteRepository() {
         super();
     }
-
+    
     public boolean existsUtente(String cf) throws IOException {
         if (cf == null || cf.isEmpty()) {
             throw new IllegalArgumentException("Codice Fiscale cannot be null or empty");
@@ -173,4 +173,5 @@ public class UtenteRepository extends DatabaseConnection {
         }
         return new SaldoRimasto(500 - saldoRimasto);
     }
+    
 }
