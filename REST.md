@@ -64,7 +64,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 ### GET `/utente/{cf}/saldo`
 
-**Descrizione**: Restituisce il saldo rimanente dell’utente con codice fiscale `{cf}`.
+**Descrizione**: Restituisce le informazioni sul saldo rimanente dell’utente con codice fiscale `{cf}`.
 
 **Parametri**:
 
@@ -80,33 +80,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 **Risposta**:
 
-- Oggetto JSON con il saldo rimanente.
-
-**Codici di stato restituiti**:
-
-- 200 OK: successo.
-- 404 Not Found: utente non trovato.
-
----
-### GET `/utente/{cf}/totaleConsumato`
-
-**Descrizione**: Restituisce il totale consumato dall'utente identificato dal codice fiscale.
-
-**Parametri**:
-
-- `{cf}`: Codice fiscale dell’utente.
-
-**Header**:
-
-- Nessuno.
-
-**Body richiesta**:
-
-- Nessuno.
-
-**Risposta**:
-
-- Oggetto JSON con il totale consumato.
+- Oggetto JSON con le informazioni sul saldo.
 
 **Codici di stato restituiti**:
 
@@ -318,6 +292,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 - 200 OK: successo.
 - 400 Bad Request: errore nei dati inviati o saldo insufficiente.
 - 404 Not Found: utente o buono non
+
 ## Esempi di oggetti JSON
 
 Di seguito sono riportati alcuni esempi di oggetti JSON utilizzati nelle richieste e risposte.
