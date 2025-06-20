@@ -1,2 +1,5 @@
 it\unimib\sd2025\AnaliticaResource.class
-it\unimib\sd2025\Analitica.class
+it\unimib\sd2025\Model\Utente.class
+it\unimib\sd2025\Model\Buono.class
+it\unimib\sd2025\Model\Analitica.class
+it\unimib\sd2025\Model\SaldoRimasto.class
