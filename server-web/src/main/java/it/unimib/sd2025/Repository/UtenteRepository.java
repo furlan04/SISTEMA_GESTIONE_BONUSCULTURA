@@ -178,4 +178,5 @@ public class UtenteRepository implements Repository<Utente> {
         }
         return new SaldoRimasto(500 - saldoRimasto);
     }
+    
 }

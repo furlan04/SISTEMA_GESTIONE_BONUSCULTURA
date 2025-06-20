@@ -4,9 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     form.addEventListener("submit", async function (e) {
       e.preventDefault();
 
-      // Raccogli i dati dal form
       const formData = new FormData(form);
-      // Adatta i nomi dei campi al backend Java (maiuscola)
       const data = {
         nome: formData.get("nome"),
         cognome: formData.get("cognome"),

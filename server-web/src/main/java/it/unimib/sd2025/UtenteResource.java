@@ -65,4 +65,32 @@ public class UtenteResource {
                     .build();
         }
     }
+    @GET
+    @Path("/{cf}/totaleConsumato")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getTotaleConsumato(@PathParam("cf") String cf) throws Exception {
+        try {
+            UtenteRepository utenteRepo = new UtenteRepository();
+            String buoni = utenteRepo.getBuoniUtente(cf);
+            BuonoRepository buonoRepo = new BuonoRepository();
+            String[] ids = buoni.split(":");
+            Double totale = 0.0;
+            for (int i = 0; i < ids.length; i++) {
+                if (ids[i].isEmpty()) {
+                    continue; // Skip empty IDs
+                }
+                Buono buono = buonoRepo.getBuono(ids[i]);
+                if (buono.getDataConsumo() != null) {
+                    totale += buono.getValore();
+                }
+            }
+            return Response.ok(JsonbBuilder.create().toJson(totale.toString())).build();
+        } catch (Exception e) {
+            return Response.status(Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
+        }
+    }
+
+  
 }

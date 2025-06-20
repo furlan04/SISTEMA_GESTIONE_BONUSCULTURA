@@ -44,7 +44,6 @@ body {
   flex-wrap: wrap;
 }
 
-/* Bottone Torna ai Buoni */
 .button-back {
   display: inline-flex;
   align-items: center;
@@ -73,7 +72,6 @@ body {
   box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
 }
 
-/* Bottone Consuma Buono */
 .button-consume {
   display: inline-flex;
   align-items: center;
@@ -109,7 +107,6 @@ body {
   box-shadow: 0 2px 8px rgba(40, 167, 69, 0.2);
 }
 
-/* Bottone Elimina Buono */
 .button-delete {
   display: inline-flex;
   align-items: center;
@@ -134,7 +131,6 @@ body {
   box-shadow: 0 6px 16px rgba(244, 67, 54, 0.3);
 }
 
-/* Bottone Modifica Buono */
 .button-modify {
   display: inline-flex;
   align-items: center;
@@ -159,13 +155,11 @@ body {
   transform: translateY(-2px);
 }
 
-/* Icone nei bottoni */
 .button-icon {
   font-size: 1.2rem;
   display: inline-block;
 }
 
-/* Animazione per il bottone che carica */
 .button-consume:disabled .button-icon {
   animation: spin 1s linear infinite;
 }
@@ -179,7 +173,6 @@ body {
   }
 }
 
-/* Messaggi di errore e successo */
 .error-message {
   padding: 20px;
   border-radius: 12px;
@@ -211,7 +204,6 @@ p {
   color: #455a64;
 }
 
-/* Responsive design */
 @media (max-width: 768px) {
   .main-container {
     margin: 20px 15px;

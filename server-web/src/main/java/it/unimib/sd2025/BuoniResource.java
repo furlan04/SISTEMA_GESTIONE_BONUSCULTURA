@@ -14,7 +14,7 @@ import jakarta.ws.rs.core.Response.Status;
 
 @Path("buoni")
 public class BuoniResource {
-    static Jsonb jsonb = JsonbBuilder.create(); 
+    static Jsonb jsonb = JsonbBuilder.create();
 
     @GET
     @Path("/{cf}")
@@ -44,4 +44,6 @@ public class BuoniResource {
                     .build();
         }
     }
+
+    
 }
