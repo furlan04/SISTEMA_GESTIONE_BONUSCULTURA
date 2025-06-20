@@ -76,7 +76,7 @@ public class Database {
             case "delete":
                 return delete(key);
             default:
-                throw new Exception("command not found!");
+                throw new Exception("Command not found!");
         }
     }
 
