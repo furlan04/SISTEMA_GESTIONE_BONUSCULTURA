@@ -1,7 +1,10 @@
 window.onload = function () {
   const form = document.getElementById("login-form");
+  const errorDiv = document.getElementById("login-error");
   form.onsubmit = async function (e) {
     e.preventDefault();
+
+    errorDiv.textContent = "";
 
     const codiceFiscale = document.getElementById("codiceFiscale").value;
 
@@ -16,13 +19,13 @@ window.onload = function () {
       const text = await response.text();
 
       if (!response.ok || text.startsWith("ERROR")) {
-        alert("Login fallito. " + text);
+        errorDiv.textContent = "Login fallito. " + text;
       } else {
         sessionStorage.setItem("codiceFiscale", codiceFiscale);
         window.location.href = "../home";
       }
     } catch (err) {
-      alert("Errore di rete: " + err.message);
+      errorDiv.textContent = "Errore di rete: " + err.message;
     }
   };
 };

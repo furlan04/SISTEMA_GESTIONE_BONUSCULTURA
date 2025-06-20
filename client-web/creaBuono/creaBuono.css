@@ -1,4 +1,3 @@
-/* Stile moderno per la pagina di creazione buoni, simile a buono.css */
 body {
   background: linear-gradient(120deg, #89f7fe 0%, #66a6ff 100%);
   font-family: "Segoe UI", Arial, sans-serif;
@@ -140,14 +139,12 @@ button[type="submit"]:disabled {
   }
 }
 
-/* Nascondi le freccette nei campi number su Chrome, Safari, Edge */
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-/* Nascondi le freccette nei campi number su Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
 }

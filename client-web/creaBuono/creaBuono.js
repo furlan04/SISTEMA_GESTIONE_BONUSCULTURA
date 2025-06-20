@@ -17,7 +17,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const valore = document.getElementById("valore").value.trim();
     const tipologia = document.getElementById("tipologia").value.trim();
 
-    // --- Controllo valore valido ---
     if (!valore || isNaN(valore) || Number(valore) <= 0) {
       msgDiv.textContent = "Inserisci un importo valido (numero positivo).";
       msgDiv.style.color = "#b00020";
@@ -44,7 +43,6 @@ document.addEventListener("DOMContentLoaded", function () {
       const text = await response.text();
 
       if (response.ok && !text.startsWith("ERROR")) {
-        // Reindirizza alla pagina dei buoni
         window.location.href = "../buoni";
       } else {
         let errorMsg = text;
