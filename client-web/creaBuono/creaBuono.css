@@ -35,7 +35,8 @@ label {
 }
 
 input[type="number"],
-input[type="text"] {
+input[type="text"],
+select {
   width: 100%;
   padding: 10px 8px;
   border: 1px solid #b0bec5;
@@ -47,7 +48,8 @@ input[type="text"] {
 }
 
 input[type="number"]:focus,
-input[type="text"]:focus {
+input[type="text"]:focus,
+select:focus {
   border-color: #66a6ff;
   outline: none;
 }
@@ -125,7 +127,8 @@ button[type="submit"]:disabled {
     margin-bottom: 16px;
   }
   input[type="number"],
-  input[type="text"] {
+  input[type="text"],
+  select {
     padding: 8px 6px;
     font-size: 0.9rem;
   }
