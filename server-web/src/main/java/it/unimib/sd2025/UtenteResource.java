@@ -49,7 +49,7 @@ public class UtenteResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response createUser(String userJson) {
+    public synchronized Response createUser(String userJson) {
         try (DatabaseConnection dbConnection = new DatabaseConnection()) {
             Utente userData = JsonbBuilder.create()
                     .fromJson(userJson, Utente.class);

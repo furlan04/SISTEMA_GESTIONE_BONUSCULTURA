@@ -59,7 +59,7 @@ public class BuonoResource {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{cf}")
-    public Response createBuono(String buonoJson, @PathParam("cf") String cf) {
+    public synchronized Response createBuono(String buonoJson, @PathParam("cf") String cf) {
         try (DatabaseConnection dbConnection = new DatabaseConnection()) {
             if (buonoJson == null || buonoJson.isEmpty() || cf == null || cf.isEmpty()) {
                 return Response.status(Status.BAD_REQUEST)
@@ -198,7 +198,7 @@ public class BuonoResource {
     @PUT
     @Path("/{cf}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyBuono(@PathParam("id") String id, @PathParam("cf") String cf, String buonoJson) {
+    public synchronized Response modifyBuono(@PathParam("id") String id, @PathParam("cf") String cf, String buonoJson) {
         if (id == null || id.isEmpty() || buonoJson == null || buonoJson.isEmpty()) {
             return Response.status(Status.BAD_REQUEST)
                     .entity(jsonb.toJson(new Errore("Buono ID and data cannot be null or empty")))
