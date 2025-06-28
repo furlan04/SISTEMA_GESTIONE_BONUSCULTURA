@@ -39,6 +39,15 @@ Il database è una semplice applicazione Java. Si possono utilizzare i seguenti 
 * `mvn compile`: per compilare l'applicazione,
 * `mvn exec:java`: per avviare l'applicazione (presuppone che la classe principale sia `Main.java`). Si pone in ascolto all'indirizzo `localhost` alla porta `3030`.
 
-#### Attenzione!!
 
-Non eseguire `mvn exec:java` per avviare il databse provocherà delle risposte `500 - internal server error` da parte del web server.
+---
+
+**Attenzione**: Non eseguire `mvn exec:java` per avviare il databse provocherà delle risposte `500 - internal server error` da parte del web server.
+
+---
+
+## Altre informazioni sulle API:
+[Documentazione completa delle API REST](REST.md)
+
+## Altre informazioni sul DATABASE:
+[Documentazione completa del Database TCP](TCP.md)

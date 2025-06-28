@@ -1,17 +1,17 @@
-# Progetto Sistemi Distribuiti 2024-2025 - TCP
+# Progetto Sistemi Distribuiti 2024-2025 - MuzNet - TCP e Connessione al Database
 
 Il database del progetto CartaCulturaGiovani è un database key-value custom, progettato e implementato tramite socket TCP. Il database accetta connessioni TCP sulla porta 3030 e gestisce i dati in memoria tramite una mappa Java (`Map<String, String>`). I dati vengono inizializzati da un file di configurazione (`initData.ini`) e sono organizzati secondo chiavi.
 
-## 1. Panoramica
+## 1. Panoramica protocollo
 
 - **Tipo:** testuale  
 - **Porta Utilizzata:** 3030  
 
 ## 2. Struttura dei Messaggi
-comando chiave valore
+`comando chiave valore`
 ### 2.2. Protocollo testuale
 
-Descrivi la struttura dei messaggi testuali scambiati.
+struttura dei messaggi testuali scambiati:
 
 - **Encoding:** UTF-8
 - **Fine linea:** LF

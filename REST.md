@@ -1,4 +1,4 @@
-# Progetto Sistemi Distribuiti 2024-2025 - API REST
+# Progetto Sistemi Distribuiti 2024-2025 - MuzNet - API REST
 
 
 **Attenzione**: l'unica rappresentazione ammessa è in formato JSON. Pertanto vengono assunti gli header `Content-Type: application/json` e `Accept: application/json`.
@@ -328,6 +328,27 @@ Di seguito sono riportati alcuni esempi di oggetti JSON utilizzati nelle richies
   "dataConsumo": null
 }
 ```
+
+### Buoni
+```json
+[
+  {
+    "dataConsumo": "2025-06-16Z",
+    "dataCreazione": "2025-06-13Z",
+    "id": "3",
+    "tipologia": "cinema",
+    "valore": 20
+  },
+  {
+    "dataConsumo": "2025-06-28Z",
+    "dataCreazione": "2025-06-12Z",
+    "id": "4",
+    "tipologia": "tre",
+    "valore": 23
+  }
+]
+```
+
 
 ### Statistiche analitiche
 
