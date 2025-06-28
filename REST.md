@@ -333,3 +333,13 @@ Di seguito sono riportati alcuni esempi di oggetti JSON utilizzati nelle richies
   "contributiDisponibili": 5000
 }
 ```
+
+### Saldo
+
+```json
+{
+  "saldo": 437,
+  "saldo_consumato": 40,
+  "saldo_non_consumato": 23
+}
+```
