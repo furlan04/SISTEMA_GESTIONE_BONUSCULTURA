@@ -19,12 +19,16 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
- * UtenteResource is a JAX-RS resource class that provides RESTful endpoints for managing user information.
- *  It allows clients to retrieve user information by Codice Fiscale, create new users, and get the remaining balance of a user.
+ * UtenteResource is a JAX-RS resource class that provides RESTful endpoints for
+ * managing user information.
+ * It allows clients to retrieve user information by Codice Fiscale, create new
+ * users, and get the remaining balance of a user.
  */
 @Path("utente")
 public class UtenteResource {
     private static final Jsonb jsonb = JsonbBuilder.create();
+    private static Object lock = new Object();
+
     @GET
     @Path("/{cf}")
     @Produces(MediaType.APPLICATION_JSON)
@@ -32,7 +36,7 @@ public class UtenteResource {
         try (DatabaseConnection dbConnection = new DatabaseConnection()) {
             UtenteRepository userRepository = new UtenteRepository(dbConnection);
             Utente utente = userRepository.get(cf);
-            
+
             return Response.ok(jsonb.toJson(utente)).build();
         } catch (IOException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
@@ -44,25 +48,26 @@ public class UtenteResource {
                     .build();
         }
     }
-   
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public synchronized Response createUser(String userJson) {
+    public Response createUser(String userJson) {
         try (DatabaseConnection dbConnection = new DatabaseConnection()) {
             Utente userData = JsonbBuilder.create()
                     .fromJson(userJson, Utente.class);
             UtenteRepository userRepository = new UtenteRepository(dbConnection);
-            Utente responseUser = userRepository.create(userData);
-
-            return Response.status(Status.CREATED)
-                    .entity(jsonb.toJson(responseUser))
-                    .build();
+            synchronized (lock) {
+                Utente responseUser = userRepository.create(userData);
+                return Response.status(Status.CREATED)
+                        .entity(jsonb.toJson(responseUser))
+                        .build();
+            }
         } catch (IOException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
                     .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
+
         } catch (Exception e) {
             return Response.status(Status.BAD_REQUEST)
                     .entity(jsonb.toJson(new Errore(e.getMessage())))
