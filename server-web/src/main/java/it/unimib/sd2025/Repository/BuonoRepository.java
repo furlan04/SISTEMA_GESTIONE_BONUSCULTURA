@@ -8,9 +8,9 @@ import it.unimib.sd2025.Id;
 import it.unimib.sd2025.Model.Buono;
 
 public class BuonoRepository implements Repository<Buono> {
-    private DatabaseConnection dbConnection = new DatabaseConnection();
-    public BuonoRepository(DatabaseConnection dbConnection) {
-        this.dbConnection = dbConnection;
+    private DatabaseConnection dbConnection;
+    public BuonoRepository() {
+        dbConnection = DatabaseConnection.getInstance();
     }
     @Override
     public boolean exists(String id) throws IOException {

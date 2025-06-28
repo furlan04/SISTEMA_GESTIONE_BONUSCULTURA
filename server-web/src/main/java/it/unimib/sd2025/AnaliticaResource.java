@@ -19,8 +19,8 @@ public class AnaliticaResource {
     @Path("/")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll() {
-        try (DatabaseConnection dbConnection = new DatabaseConnection()){
-
+        try {
+            DatabaseConnection dbConnection = DatabaseConnection.getInstance();
             String allKeysResponse = dbConnection.sendDatabaseCommand("getallkeys");
             System.out.println("All keys retrieved: " + allKeysResponse);
             String[] keys = allKeysResponse.split(";");
@@ -74,9 +74,13 @@ public class AnaliticaResource {
 
             return Response.ok(result).build();
 
-        } catch (Exception e) {
+        } catch (RuntimeException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
                     .entity(Collections.singletonMap("error", e.getMessage()))
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                    .entity(Collections.singletonMap("error", "Failed to retrieve analitica data: " + e.getMessage()))
                     .build();
         }
     }

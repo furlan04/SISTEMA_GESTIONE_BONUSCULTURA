@@ -21,8 +21,8 @@ public class BuoniResource {
     @Path("/{cf}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll(@PathParam("cf") String cf) {
-        try (DatabaseConnection dbConnection = new DatabaseConnection()) {
-            UtenteRepository utenteRepo = new UtenteRepository(dbConnection);
+        try  {
+            UtenteRepository utenteRepo = new UtenteRepository();
             String buoni = utenteRepo.getBuoniUtente(cf);
 
             System.out.println("Buoni retrieved for user " + cf + ": " + buoni);
@@ -33,18 +33,20 @@ public class BuoniResource {
                 if (ids[i].isEmpty()) {
                     continue; // Skip empty IDs
                 }
-                BuonoRepository buonoRepo = new BuonoRepository(dbConnection);
+                BuonoRepository buonoRepo = new BuonoRepository();
                 Buono buono = buonoRepo.get(ids[i]);
                 buoniList[i] = buono;
             }
 
             return Response.ok(JsonbBuilder.create().toJson(buoniList)).build();
+        } catch(RuntimeException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Internal server error: " + e.getMessage())
+                    .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity(e.getMessage())
                     .build();
         }
     }
-
-    
 }

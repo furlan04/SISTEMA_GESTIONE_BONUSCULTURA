@@ -9,10 +9,9 @@ import it.unimib.sd2025.Model.SaldoRimasto;
 import it.unimib.sd2025.Model.Utente;
 
 public class UtenteRepository implements Repository<Utente> {
-    private DatabaseConnection dbConnection = new DatabaseConnection();
-    public UtenteRepository(DatabaseConnection dbConnection) {
-        this.dbConnection = dbConnection;
-        
+    private DatabaseConnection dbConnection;
+    public UtenteRepository() {
+        dbConnection = DatabaseConnection.getInstance();
     }
     @Override
     public boolean exists(String cf) throws IOException {

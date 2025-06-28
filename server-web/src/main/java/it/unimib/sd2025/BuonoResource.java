@@ -29,14 +29,18 @@ public class BuonoResource {
     @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBuonoInfo(@PathParam("id") String id) {
-        try (DatabaseConnection dbConnection = new DatabaseConnection()) {
-            BuonoRepository buonoRepository = new BuonoRepository(dbConnection);
+        try {
+            BuonoRepository buonoRepository = new BuonoRepository();
             Buono buono = buonoRepository.get(id);
             String json = jsonb.toJson(buono);
             System.out.println("User info retrieved: " + json);
 
             return Response.ok(json)
                     .type(MediaType.APPLICATION_JSON)
+                    .build();
+        } catch (RuntimeException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Internal server error: " + e.getMessage())
                     .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
@@ -50,105 +54,95 @@ public class BuonoResource {
     @Produces(MediaType.APPLICATION_JSON)
     @Path("/{cf}")
     public Response createBuono(String buonoJson, @PathParam("cf") String cf) {
-        try (DatabaseConnection dbConnection = new DatabaseConnection()) {
-            if (buonoJson == null || buonoJson.isEmpty() || cf == null || cf.isEmpty()) {
-                return Response.status(Status.BAD_REQUEST)
-                        .entity("Buono data cannot be null or empty")
-                        .build();
-            }
+        if (buonoJson == null || buonoJson.isEmpty() || cf == null || cf.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST)
+                    .entity("Buono data cannot be null or empty")
+                    .build();
+        }
+        try {
             Buono buonoData = jsonb.fromJson(buonoJson, Buono.class);
 
-            UtenteRepository userRepository = new UtenteRepository(dbConnection);
-            BuonoRepository buonoRepository = new BuonoRepository(dbConnection);
+            UtenteRepository userRepository = new UtenteRepository();
+            BuonoRepository buonoRepository = new BuonoRepository();
 
-            try {
-                if (!userRepository.exists(cf)) {
-                    return Response.status(Status.BAD_REQUEST)
-                            .entity("cf " + cf + " does not exist")
-                            .build();
-
-                }
-            } catch (Exception e) {
+            if (!userRepository.exists(cf)) {
                 return Response.status(Status.BAD_REQUEST)
-                        .entity("Invalid user data format")
+                        .entity("cf " + cf + " does not exist")
                         .build();
+
             }
-            try {
-                SaldoRimasto sr = userRepository.getSaldoRimastoUtente(cf);
-                if (buonoData.getValore() <= 0 || sr.getSaldo() < buonoData.getValore()) {
-                    return Response.status(Status.BAD_REQUEST)
-                            .entity("Buono value must be greater than zero or exceeds user's remaining balance")
-                            .build();
-                }
-            } catch (Exception e) {
+            SaldoRimasto sr = userRepository.getSaldoRimastoUtente(cf);
+            if (buonoData.getValore() <= 0 || sr.getSaldo() < buonoData.getValore()) {
                 return Response.status(Status.BAD_REQUEST)
-                        .entity("Failed to retrieve user's remaining balance: " + e.getMessage())
+                        .entity("Buono value must be greater than zero or exceeds user's remaining balance")
                         .build();
             }
 
-            try {
-                buonoData.setDataCreazione(new Date(System.currentTimeMillis()));
-                buonoData = buonoRepository.create(buonoData);
-            } catch (Exception e) {
-                return Response.status(Status.BAD_REQUEST)
-                        .entity(e.getMessage())
-                        .build();
-            }
-            try {
-                userRepository.addBuonoUtente(cf, buonoData.getId());
-
-            } catch (Exception e) {
-                return Response.status(Status.BAD_REQUEST)
-                        .entity(e.getMessage())
-                        .build();
-            }
+            buonoData.setDataCreazione(new Date(System.currentTimeMillis()));
+            buonoData = buonoRepository.create(buonoData);
+            userRepository.addBuonoUtente(cf, buonoData.getId());
 
             return Response.status(Status.CREATED)
                     .entity(jsonb.toJson(buonoData))
                     .build();
+        } catch (RuntimeException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Internal server error: " + e.getMessage())
+                    .build();
+        } catch (IOException e) {
+            return Response.status(Status.BAD_REQUEST)
+                    .entity("Error processing request: " + e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
         }
+
     }
 
     @DELETE
     @Path("/{cf}/{id}")
     public Response deleteBuono(@PathParam("id") String id, @PathParam("cf") String cf) {
-        try (DatabaseConnection dbConnection = new DatabaseConnection()) {
-            if (id == null || id.isEmpty() || cf == null || cf.isEmpty()) {
+        if (id == null || id.isEmpty() || cf == null || cf.isEmpty()) {
+            return Response.status(Status.BAD_REQUEST)
+                    .entity("Buono ID and CF cannot be null or empty ")
+                    .build();
+        }
+        try {
+            BuonoRepository buonoRepository = new BuonoRepository();
+            UtenteRepository userRepository = new UtenteRepository();
+            if (!userRepository.exists(cf)) {
                 return Response.status(Status.BAD_REQUEST)
-                        .entity("Buono ID and CF cannot be null or empty ")
+                        .entity("User with Codice Fiscale " + cf + " does not exist")
                         .build();
             }
+            if (!userRepository.getBuoniUtente(cf).contains(id)) {
+                return Response.status(Status.BAD_REQUEST)
+                        .entity("User does not own the Buono with ID: " + id)
+                        .build();
+            }
+            Buono deleted_buono;
             try {
-                BuonoRepository buonoRepository = new BuonoRepository(dbConnection);
-                UtenteRepository userRepository = new UtenteRepository(dbConnection);
-                if (!userRepository.exists(cf)) {
-                    return Response.status(Status.BAD_REQUEST)
-                            .entity("User with Codice Fiscale " + cf + " does not exist")
-                            .build();
-                }
-                if (!userRepository.getBuoniUtente(cf).contains(id)) {
-                    return Response.status(Status.BAD_REQUEST)
-                            .entity("User does not own the Buono with ID: " + id)
-                            .build();
-                }
-                Buono deleted_buono;
-                try {
-                    deleted_buono = buonoRepository.deleteBuono(id);
-                    userRepository.removeBuonoUtente(cf, id);
-                } catch (Exception e) {
-                    return Response.status(Status.BAD_REQUEST)
-                            .entity("Failed to delete Buono: " + e.getMessage())
-                            .build();
-                }
-
-                return Response.ok(jsonb.toJson(deleted_buono))
-                        .type(MediaType.APPLICATION_JSON)
-                        .build();
+                deleted_buono = buonoRepository.deleteBuono(id);
+                userRepository.removeBuonoUtente(cf, id);
             } catch (Exception e) {
-                return Response.status(Status.NOT_FOUND)
-                        .entity(e.getMessage())
+                return Response.status(Status.BAD_REQUEST)
+                        .entity("Failed to delete Buono: " + e.getMessage())
                         .build();
             }
+
+            return Response.ok(jsonb.toJson(deleted_buono))
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        } catch (RuntimeException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Internal server error: " + e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 
@@ -156,11 +150,15 @@ public class BuonoResource {
     @Path("/{id}/consuma")
     @Produces(MediaType.APPLICATION_JSON)
     public Response consuma(@PathParam("id") String id) {
-        try (DatabaseConnection dbConnection = new DatabaseConnection()) {
-            BuonoRepository buonoRepository = new BuonoRepository(dbConnection);
+        try {
+            BuonoRepository buonoRepository = new BuonoRepository();
             Buono buono = buonoRepository.consumaBuono(id);
             return Response.ok(jsonb.toJson(buono))
                     .type(MediaType.APPLICATION_JSON)
+                    .build();
+        } catch (RuntimeException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Internal server error: " + e.getMessage())
                     .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
@@ -172,34 +170,39 @@ public class BuonoResource {
     @PUT
     @Path("/{cf}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyBuono(@PathParam("id") String id, @PathParam("cf") String cf, String buonoJson)
-            throws Exception {
+    public Response modifyBuono(@PathParam("id") String id, @PathParam("cf") String cf, String buonoJson) {
         if (id == null || id.isEmpty() || buonoJson == null || buonoJson.isEmpty()) {
             return Response.status(Status.BAD_REQUEST)
                     .entity("Buono ID and data cannot be null or empty")
                     .build();
         }
-        try (DatabaseConnection dbConnection = new DatabaseConnection()) {
-            BuonoRepository buonoRepository = new BuonoRepository(dbConnection);
-            UtenteRepository utenteRepository = new UtenteRepository(dbConnection);
+        try {
+            BuonoRepository buonoRepository = new BuonoRepository();
+            UtenteRepository utenteRepository = new UtenteRepository();
             if (!utenteRepository.exists(cf)) {
                 throw new IOException("Utente con codice fiscale " + cf + " non esiste");
             }
             double saldoRimasto = utenteRepository.getSaldoRimastoUtente(cf).getSaldo();
-            try {
-                Buono updatedBuono = jsonb.fromJson(buonoJson, Buono.class);
-                if (updatedBuono.getValore() > saldoRimasto || updatedBuono.getValore() <= 0) {
-                    throw new IOException("Buono value must be greater than zero or exceeds user's remaining balance");
-                }
-                updatedBuono = buonoRepository.updateBuono(id, updatedBuono);
-                return Response.ok(jsonb.toJson(updatedBuono))
-                        .type(MediaType.APPLICATION_JSON)
-                        .build();
-            } catch (Exception e) {
-                return Response.status(Status.BAD_REQUEST)
-                        .entity(e.getMessage())
-                        .build();
+            Buono updatedBuono = jsonb.fromJson(buonoJson, Buono.class);
+            if (updatedBuono.getValore() > saldoRimasto || updatedBuono.getValore() <= 0) {
+                throw new IOException("Buono value must be greater than zero or exceeds user's remaining balance");
             }
+            updatedBuono = buonoRepository.updateBuono(id, updatedBuono);
+            return Response.ok(jsonb.toJson(updatedBuono))
+                    .type(MediaType.APPLICATION_JSON)
+                    .build();
+        } catch (RuntimeException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Internal server error: " + e.getMessage())
+                    .build();
+        } catch (IOException e) {
+            return Response.status(Status.BAD_REQUEST)
+                    .entity("Error processing request: " + e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Status.NOT_FOUND)
+                    .entity(e.getMessage())
+                    .build();
         }
     }
 }
