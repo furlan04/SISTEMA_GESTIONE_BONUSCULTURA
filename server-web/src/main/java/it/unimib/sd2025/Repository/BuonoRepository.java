@@ -7,6 +7,11 @@ import it.unimib.sd2025.DatabaseConnection;
 import it.unimib.sd2025.Id;
 import it.unimib.sd2025.Model.Buono;
 
+
+/**
+    * BuonoRepository is a class that implements the Repository interface for managing Buono objects.
+    * It provides methods to create, retrieve, update, delete, and consume Buono objects in the database.
+ */
 public class BuonoRepository implements Repository<Buono> {
     private DatabaseConnection dbConnection;
     public BuonoRepository(DatabaseConnection dbConnection) {

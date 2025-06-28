@@ -22,6 +22,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
+/**
+ * BuonoResource is a JAX-RS resource class that provides RESTful endpoints for managing Buono (voucher) information.
+ * It allows for creating, retrieving, updating, deleting, and consuming vouchers.
+ */
 @Path("buono")
 public class BuonoResource {
     static Jsonb jsonb = JsonbBuilder.create();

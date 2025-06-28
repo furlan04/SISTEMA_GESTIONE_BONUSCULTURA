@@ -8,6 +8,12 @@ import it.unimib.sd2025.DatabaseConnection;
 import it.unimib.sd2025.Model.SaldoRimasto;
 import it.unimib.sd2025.Model.Utente;
 
+
+/**
+ * UtenteRepository is a class that implements the Repository interface for managing Utente objects.
+ * It provides methods to create, retrieve, update, delete Utente objects in the database.
+ * It also provides methods to manage the user's buoni (vouchers).
+ */
 public class UtenteRepository implements Repository<Utente> {
     private DatabaseConnection dbConnection;
     public UtenteRepository(DatabaseConnection dbConnection) {

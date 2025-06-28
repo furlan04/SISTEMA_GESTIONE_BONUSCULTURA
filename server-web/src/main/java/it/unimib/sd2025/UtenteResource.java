@@ -18,6 +18,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
+/**
+ * UtenteResource is a JAX-RS resource class that provides RESTful endpoints for managing user information.
+ *  It allows clients to retrieve user information by Codice Fiscale, create new users, and get the remaining balance of a user.
+ */
 @Path("utente")
 public class UtenteResource {
     private static final Jsonb jsonb = JsonbBuilder.create();

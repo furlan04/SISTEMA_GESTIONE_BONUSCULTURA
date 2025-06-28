@@ -17,7 +17,8 @@ import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
 /**
- * BuoniResource provides an endpoint to retrieve vouchers for a specific user.
+ * BuoniResource is a JAX-RS resource class that provides RESTful endpoints for managing vouchers (buoni).
+ * It allows clients to retrieve all vouchers for a user identified by their fiscal code (cf).
  */
 @Path("buoni")
 public class BuoniResource {

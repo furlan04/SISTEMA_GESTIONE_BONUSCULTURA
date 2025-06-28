@@ -13,8 +13,10 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
 /**
- * AnaliticaResource provides an endpoint to retrieve analytics data
+ * AnaliticaResource is a JAX-RS resource class that provides RESTful endpoints for retrieving analytical data
  * about users and vouchers in the system.
+ * It allows clients to retrieve statistics such as the number of registered users, total vouchers, consumed vouchers,
+ * non-consumed vouchers, and financial contributions.
  */
 @Path("analitica")
 public class AnaliticaResource {
