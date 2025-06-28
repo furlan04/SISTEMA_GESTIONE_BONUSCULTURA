@@ -43,11 +43,11 @@ public class BuoniResource {
             return Response.ok(JsonbBuilder.create().toJson(buoniList)).build();
         } catch (IOException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity("Database connection error: " + e.getMessage())
+                    .entity(jsonb.toJson(new Error(e.getMessage())))
                     .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                    .entity(e.getMessage())
+                    .entity(jsonb.toJson(new Error(e.getMessage())))
                     .build();
         }
     }

@@ -1,7 +1,6 @@
 package it.unimib.sd2025;
 
 import java.io.IOException;
-import java.util.Collections;
 
 import it.unimib.sd2025.Model.Analitica;
 import jakarta.json.bind.Jsonb;
@@ -77,7 +76,7 @@ public class AnaliticaResource {
 
         } catch (IOException e) {
             return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                    .entity(Collections.singletonMap("error", e.getMessage()))
+                    .entity(jsonb.toJson(new Error(e.getMessage())))
                     .build();
         }
     }
