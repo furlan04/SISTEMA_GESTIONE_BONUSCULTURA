@@ -45,7 +45,7 @@ document.addEventListener("DOMContentLoaded", function () {
       if (response.ok && !text.startsWith("ERROR")) {
         window.location.href = "../buoni";
       } else {
-        let errorMsg = text;
+        let errorMsg = JSON.parse(text).message;
         if (
           text.includes(
             "Buono value must be greater than zero or exceeds user's remaining balance"

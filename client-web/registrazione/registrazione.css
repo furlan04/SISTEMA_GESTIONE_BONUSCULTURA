@@ -1,6 +1,6 @@
 body {
   background: linear-gradient(120deg, #fbc2eb 0%, #a6c1ee 100%);
-  font-family: 'Segoe UI', Arial, sans-serif;
+  font-family: "Segoe UI", Arial, sans-serif;
   margin: 0;
   min-height: 100vh;
 }
@@ -17,7 +17,7 @@ form {
   margin: 40px auto;
   padding: 32px 28px 24px 28px;
   border-radius: 16px;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
 }
 
 label {
@@ -62,4 +62,15 @@ button[type="submit"] {
 button[type="submit"]:hover {
   background: #fbc2eb;
   color: #2d3a4b;
+}
+
+.msg {
+  margin-top: 18px;
+  font-weight: bold;
+  padding: 14px;
+  border-radius: 12px;
+  background: #fff;
+  border: 1px solid #dee2e6;
+  color: #b00020;
+  text-align: center;
 }

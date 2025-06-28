@@ -65,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async function () {
       if (response.ok && !text.startsWith("ERROR")) {
         window.location.href = "../buoni";
       } else {
-        msgDiv.textContent = "Errore: " + text;
+        msgDiv.textContent = "Errore: " + JSON.parse(text).message;
         msgDiv.style.color = "#b00020";
       }
     } catch (err) {

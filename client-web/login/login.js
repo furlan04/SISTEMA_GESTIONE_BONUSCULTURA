@@ -19,7 +19,7 @@ window.onload = function () {
       const text = await response.text();
 
       if (!response.ok || text.startsWith("ERROR")) {
-        errorDiv.textContent = "Login fallito. " + text;
+        errorDiv.textContent = JSON.parse(text).message;
       } else {
         sessionStorage.setItem("codiceFiscale", codiceFiscale);
         window.location.href = "../home";
