@@ -2,6 +2,7 @@ package it.unimib.sd2025;
 
 import java.io.IOException;
 
+import it.unimib.sd2025.Model.Errore;
 import it.unimib.sd2025.Model.SaldoRimasto;
 import it.unimib.sd2025.Model.Utente;
 import it.unimib.sd2025.Repository.UtenteRepository;
@@ -31,11 +32,11 @@ public class UtenteResource {
             return Response.ok(jsonb.toJson(utente)).build();
         } catch (IOException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity(jsonb.toJson(new Error(e.getMessage())))
+                    .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                    .entity(jsonb.toJson(new Error(e.getMessage())))
+                    .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
         }
     }
@@ -56,11 +57,11 @@ public class UtenteResource {
                     .build();
         } catch (IOException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity(jsonb.toJson(new Error(e.getMessage())))
+                    .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
         } catch (Exception e) {
             return Response.status(Status.BAD_REQUEST)
-                    .entity(jsonb.toJson(new Error(e.getMessage())))
+                    .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
         }
     }
@@ -76,11 +77,11 @@ public class UtenteResource {
                     .build();
         } catch (IOException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity(jsonb.toJson(new Error(e.getMessage())))
+                    .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                    .entity(jsonb.toJson(new Error(e.getMessage())))
+                    .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
         }
     }

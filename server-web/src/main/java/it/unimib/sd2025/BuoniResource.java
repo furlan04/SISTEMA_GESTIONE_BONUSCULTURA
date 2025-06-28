@@ -3,6 +3,7 @@ package it.unimib.sd2025;
 import java.io.IOException;
 
 import it.unimib.sd2025.Model.Buono;
+import it.unimib.sd2025.Model.Errore;
 import it.unimib.sd2025.Repository.BuonoRepository;
 import it.unimib.sd2025.Repository.UtenteRepository;
 import jakarta.json.bind.Jsonb;
@@ -53,11 +54,11 @@ public class BuoniResource {
             return Response.ok(JsonbBuilder.create().toJson(buoniList)).build();
         } catch (IOException e) {
             return Response.status(Status.INTERNAL_SERVER_ERROR)
-                    .entity(jsonb.toJson(new Error(e.getMessage())))
+                    .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
-                    .entity(jsonb.toJson(new Error(e.getMessage())))
+                    .entity(jsonb.toJson(new Errore(e.getMessage())))
                     .build();
         }
     }

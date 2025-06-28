@@ -1,8 +1,8 @@
 package it.unimib.sd2025.Model;
 
-public class Error {
+public class Errore {
     private String message;
-    public Error(String message) {
+    public Errore(String message) {
         this.message = message;
     }
     public String getMessage() {
