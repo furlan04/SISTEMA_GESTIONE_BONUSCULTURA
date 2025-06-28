@@ -1,6 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
   const nav = document.getElementById("nav-links");
   const cf = sessionStorage.getItem("codiceFiscale");
+  const nome = sessionStorage.getItem("nome");
 
   nav.innerHTML = "";
 
@@ -12,8 +13,11 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("logout").addEventListener("click", (e) => {
       e.preventDefault();
       sessionStorage.removeItem("codiceFiscale");
+      sessionStorage.removeItem("nome");
       window.location.href = "../home";
     });
+
+    mostraInfoUtente(cf); // <--- aggiungi questa chiamata
   } else {
     nav.innerHTML = `
       <li><a href="../login">Login</a></li>
@@ -47,3 +51,30 @@ document.addEventListener("DOMContentLoaded", () => {
       tbody.innerHTML = `<tr><td colspan="2">Errore nel caricamento delle statistiche.</td></tr>`;
     });
 });
+
+// Funzione per mostrare le info utente
+function mostraInfoUtente(cf) {
+  fetch(`http://localhost:8080/utente/${encodeURIComponent(cf)}`)
+    .then((res) => {
+      if (!res.ok) throw new Error("Utente non trovato");
+      return res.json();
+    })
+    .then((utente) => {
+      // Se la risposta è una stringa JSON, fai il parse
+      if (typeof utente === "string") utente = JSON.parse(utente);
+      const infoDiv = document.getElementById("utente-info");
+      infoDiv.innerHTML = `
+        <div class="utente-info-box">
+          <strong>Nome:</strong> ${utente.nome}<br>
+          <strong>Cognome:</strong> ${utente.cognome}<br>
+          <strong>Email:</strong> ${utente.email}
+        </div>
+      `;
+      // Salva il nome anche nel sessionStorage per la navbar
+      sessionStorage.setItem("nome", utente.nome);
+    })
+    .catch(() => {
+      const infoDiv = document.getElementById("utente-info");
+      infoDiv.innerHTML = `<div class="utente-info-box">Errore nel caricamento dati utente.</div>`;
+    });
+}
