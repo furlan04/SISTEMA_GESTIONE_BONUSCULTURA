@@ -15,16 +15,26 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
 
+/**
+ * BuoniResource provides an endpoint to retrieve vouchers for a specific user.
+ */
 @Path("buoni")
 public class BuoniResource {
     static Jsonb jsonb = JsonbBuilder.create();
 
+    /**
+     * Retrieves all vouchers for a user identified by their fiscal code (cf).
+     * 
+     * @param cf The fiscal code of the user.
+     * @return A JSON response containing the list of vouchers for the user.
+     */
     @GET
     @Path("/{cf}")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll(@PathParam("cf") String cf) {
         try (DatabaseConnection dbConnection = new DatabaseConnection()) {
             UtenteRepository utenteRepo = new UtenteRepository(dbConnection);
+            
             String buoni = utenteRepo.getBuoniUtente(cf);
 
             System.out.println("Buoni retrieved for user " + cf + ": " + buoni);

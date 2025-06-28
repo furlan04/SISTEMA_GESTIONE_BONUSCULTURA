@@ -12,6 +12,13 @@ public class Database {
     private Map<String, String> data;
     private static final String INIT_FILE = "./initData.ini";
 
+
+    /**
+     * initializes the database with data from the init file.
+     * The file should contain key-value pairs, one per line, with the format:
+     * key value
+     * Lines starting with ';' are considered comments and ignored.
+     */
     private void seedDatabase() {
         Path path = Paths.get(INIT_FILE);
         try (BufferedReader reader = new BufferedReader(new FileReader(path.toFile()))) {
@@ -42,13 +49,13 @@ public class Database {
     }
 
     /**
-     * Esegue un'azione basata sul comando fornito.
+     * Execute an action based on the provided command string.
      * 
-     * @param command Il comando da eseguire, ad esempio "get key", "set key value",
-     *                "delete key".
-     * @return Il risultato dell'azione eseguita.
-     * @throws Exception Se il comando non è valido o se si verifica un errore
-     *                   durante l'esecuzione.
+     * @param command Command to execute. It should be in the format:
+     *               "method key value", where method is one of the following:
+     *              "exists", "getallkeys", "get", "set", or "delete".
+     * @return
+     * @throws Exception
      */
     public synchronized String action(String command) throws Exception {
         if (command == null || command.isEmpty()) {

@@ -12,6 +12,10 @@ import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 
+/**
+ * AnaliticaResource provides an endpoint to retrieve analytics data
+ * about users and vouchers in the system.
+ */
 @Path("analitica")
 public class AnaliticaResource {
     static Jsonb jsonb = JsonbBuilder.create();
@@ -30,10 +34,14 @@ public class AnaliticaResource {
             double spesi = 0, nonSpesi = 0;
 
             for (String key : keys) {
+                // Count number of users
                 if (key.matches("^utente:[A-Z0-9]+:nome$")) {
                     utenti++;
                 }
 
+                // Count total vouchers
+                // categorize them into consumed and non-consumed
+                // and calculate the total spent and not spent amounts
                 if (key.matches("^buono:\\d+:valore$")) {
                     String valoreStr = dbConnection.sendDatabaseCommand("get " + key).trim();
                     double valore = Double.parseDouble(valoreStr);

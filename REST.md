@@ -1,6 +1,5 @@
 # Progetto Sistemi Distribuiti 2024-2025 - API REST
 
-Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 **Attenzione**: l'unica rappresentazione ammessa è in formato JSON. Pertanto vengono assunti gli header `Content-Type: application/json` e `Accept: application/json`.
 
@@ -32,6 +31,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 - 200 OK: successo.
 - 404 Not Found: utente non trovato.
+- 500 Server Error: errore lato server
 
 ---
 
@@ -59,6 +59,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 - 201 Created: successo.
 - 400 Bad Request: errore nei dati inviati.
+- 500 Server Error: errore lato server 
 
 ---
 
@@ -86,6 +87,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 - 200 OK: successo.
 - 404 Not Found: utente non trovato.
+- 500 Server Error: errore lato server
 
 ---
 
@@ -121,7 +123,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 **Codici di stato restituiti**:
 
 - 200 OK: successo.
-- 500 Internal Server Error: errore lato server.
+- 500 Server Error: errore lato server
 
 ---
 
@@ -151,6 +153,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 - 200 OK: successo.
 - 404 Not Found: utente o buoni non trovati.
+- 500 Server Error: errore lato server
 
 ---
 
@@ -180,7 +183,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 - 200 OK: successo.
 - 404 Not Found: buono non trovato.
-
+- 500 Server Error: errore lato server
 ---
 
 ### POST `/buono/{cf}`
@@ -207,6 +210,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 - 201 Created: successo.
 - 400 Bad Request: errore nei dati inviati o saldo insufficiente.
+- 500 Server Error: errore lato server
 
 ---
 
@@ -236,6 +240,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 - 200 OK: successo.
 - 400 Bad Request: utente o buono non valido.
 - 404 Not Found: buono o utente non trovato.
+- 500 Server Error: errore lato server
 
 ---
 
@@ -263,6 +268,7 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 
 - 200 OK: successo.
 - 404 Not Found: buono non trovato.
+- 500 Server Error: errore lato server
 
 ---
 
@@ -292,6 +298,9 @@ Documentare qui l'API REST progettata. Di seguito è presente un esempio.
 - 200 OK: successo.
 - 400 Bad Request: errore nei dati inviati o saldo insufficiente.
 - 404 Not Found: utente o buono non
+- 500 Server Error: errore lato server
+
+### L'errore: `500 Server Error: errore lato server` può essere spesso provocato da una mancata connessione al database, controlla che il database stia funzionando correttamente!
 
 ## Esempi di oggetti JSON
 

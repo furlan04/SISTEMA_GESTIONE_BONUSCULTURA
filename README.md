@@ -14,7 +14,7 @@ CartaCulturaGiovani è un sistema digitale che permette ai giovani utenti di reg
 
 ## Compilazione ed esecuzione
 
-Sia il server Web sia il database sono applicazioni Java gestire con Maven. All'interno delle rispettive cartelle si può trovare il file `pom.xml` in cui è presenta la configurazione di Maven per il progetto. Si presuppone l'utilizzo della macchina virtuale di laboratorio, per cui nel `pom.xml` è specificato l'uso di Java 21.
+Sia il server Web sia il database sono applicazioni Java da gestire con Maven. <br> All'interno delle rispettive cartelle si può trovare il file `pom.xml` in cui è presenta la configurazione di Maven per il progetto. Si presuppone l'utilizzo della macchina virtuale di laboratorio, per cui nel `pom.xml` è specificato l'uso di Java 21.
 
 Il server Web e il database sono dei progetti Java che utilizano Maven per gestire le dipendenze, la compilazione e l'esecuzione.
 
@@ -38,3 +38,7 @@ Il database è una semplice applicazione Java. Si possono utilizzare i seguenti 
 * `mvn clean`: per ripulire la cartella dai file temporanei,
 * `mvn compile`: per compilare l'applicazione,
 * `mvn exec:java`: per avviare l'applicazione (presuppone che la classe principale sia `Main.java`). Si pone in ascolto all'indirizzo `localhost` alla porta `3030`.
+
+#### Attenzione!!
+
+Non eseguire `mvn exec:java` per avviare il databse provocherà delle risposte `500 - internal server error` da parte del web server.
