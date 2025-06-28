@@ -66,6 +66,9 @@ function mostraBuoni(buoni) {
     return;
   }
 
+  buoni.sort((a, b) => new Date(b.dataCreazione) - new Date(a.dataCreazione));
+
+
   buoni.forEach((buono) => {
     const div = document.createElement("div");
     div.className = "buono";
