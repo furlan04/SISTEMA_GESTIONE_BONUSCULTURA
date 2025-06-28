@@ -27,6 +27,21 @@ document.addEventListener("DOMContentLoaded", () => {
   fetch("http://localhost:8080/analitica")
     .then((res) => res.json())
     .then((data) => {
+      // Se uno dei campi principali è undefined/null, mostra solo il messaggio di errore
+      if (
+        !data ||
+        data.utenti_registrati === undefined ||
+        data.buoni_totali === undefined ||
+        data.buoni_consumati === undefined ||
+        data.buoni_non_consumati === undefined ||
+        data.contributi_spesi === undefined ||
+        data.contributi_assegnati === undefined ||
+        data.contributi_disponibili === undefined
+      ) {
+        const table = document.getElementById("analitica-table");
+        table.outerHTML = `<div class="analitica-error">Non è stato possibile recuperare le statistiche di sistema.</div>`;
+        return;
+      }
       const tbody = document.querySelector("#analitica-table tbody");
       tbody.innerHTML = `
         <tr><th>Utenti registrati</th><td>${data.utenti_registrati}</td></tr>
@@ -47,8 +62,8 @@ document.addEventListener("DOMContentLoaded", () => {
       `;
     })
     .catch(() => {
-      const tbody = document.querySelector("#analitica-table tbody");
-      tbody.innerHTML = `<tr><td colspan="2">Errore nel caricamento delle statistiche.</td></tr>`;
+      const table = document.getElementById("analitica-table");
+      table.outerHTML = `<div class="analitica-error">Non è stato possibile recuperare le statistiche di sistema.</div>`;
     });
 });
 
