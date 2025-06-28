@@ -208,7 +208,8 @@ public class BuonoResource {
             double saldoRimasto = utenteRepository.getSaldoRimastoUtente(cf).getSaldo();
             try {
                 Buono updatedBuono = jsonb.fromJson(buonoJson, Buono.class);
-                if (updatedBuono.getValore() > saldoRimasto || updatedBuono.getValore() <= 0) {
+                Buono oldBuono = buonoRepository.get(id);
+                if (updatedBuono.getValore() > saldoRimasto + oldBuono.getValore() || updatedBuono.getValore() <= 0) {
                     throw new IOException("Buono value must be greater than zero or exceeds user's remaining balance");
                 }
                 updatedBuono = buonoRepository.updateBuono(id, updatedBuono);

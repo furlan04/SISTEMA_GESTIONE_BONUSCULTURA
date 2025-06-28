@@ -94,3 +94,14 @@ p {
 .analitica-table tr:last-child td {
   border-bottom: none;
 }
+
+.utente-info-box {
+  background: #e0f7fa;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 24px auto 24px auto;
+  max-width: 400px;
+  color: #2d3a4b;
+  font-size: 1.1em;
+  box-shadow: 0 2px 8px rgba(102, 166, 255, 0.08);
+}

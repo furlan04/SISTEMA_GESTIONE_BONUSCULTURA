@@ -1,10 +1,5 @@
 package it.unimib.sd2025;
 
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.core.Response.Status;
-
 import java.io.IOException;
 
 import it.unimib.sd2025.Model.SaldoRimasto;
@@ -12,6 +7,15 @@ import it.unimib.sd2025.Model.Utente;
 import it.unimib.sd2025.Repository.UtenteRepository;
 import jakarta.json.bind.Jsonb;
 import jakarta.json.bind.JsonbBuilder;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.core.Response.Status;
 
 @Path("utente")
 public class UtenteResource {
