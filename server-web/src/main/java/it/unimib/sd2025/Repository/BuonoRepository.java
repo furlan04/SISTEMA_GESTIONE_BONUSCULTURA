@@ -8,7 +8,7 @@ import it.unimib.sd2025.Id;
 import it.unimib.sd2025.Model.Buono;
 
 public class BuonoRepository implements Repository<Buono> {
-    private DatabaseConnection dbConnection = new DatabaseConnection();
+    private DatabaseConnection dbConnection;
     public BuonoRepository(DatabaseConnection dbConnection) {
         this.dbConnection = dbConnection;
     }

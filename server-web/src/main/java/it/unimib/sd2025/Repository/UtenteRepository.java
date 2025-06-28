@@ -9,7 +9,7 @@ import it.unimib.sd2025.Model.SaldoRimasto;
 import it.unimib.sd2025.Model.Utente;
 
 public class UtenteRepository implements Repository<Utente> {
-    private DatabaseConnection dbConnection = new DatabaseConnection();
+    private DatabaseConnection dbConnection;
     public UtenteRepository(DatabaseConnection dbConnection) {
         this.dbConnection = dbConnection;
         

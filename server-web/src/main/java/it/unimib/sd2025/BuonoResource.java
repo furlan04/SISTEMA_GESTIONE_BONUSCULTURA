@@ -38,6 +38,11 @@ public class BuonoResource {
             return Response.ok(json)
                     .type(MediaType.APPLICATION_JSON)
                     .build();
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
+                    .build();
+        
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity(e.getMessage())
@@ -106,6 +111,14 @@ public class BuonoResource {
             return Response.status(Status.CREATED)
                     .entity(jsonb.toJson(buonoData))
                     .build();
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
+                    .build();
+        } catch (Exception e) {
+            return Response.status(Status.BAD_REQUEST)
+                    .entity("Failed to create Buono: " + e.getMessage())
+                    .build();
         }
     }
 
@@ -149,6 +162,10 @@ public class BuonoResource {
                         .entity(e.getMessage())
                         .build();
             }
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
+                    .build();
         }
     }
 
@@ -162,6 +179,10 @@ public class BuonoResource {
             return Response.ok(jsonb.toJson(buono))
                     .type(MediaType.APPLICATION_JSON)
                     .build();
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
+                    .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity(e.getMessage())
@@ -172,8 +193,7 @@ public class BuonoResource {
     @PUT
     @Path("/{cf}/{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response modifyBuono(@PathParam("id") String id, @PathParam("cf") String cf, String buonoJson)
-            throws Exception {
+    public Response modifyBuono(@PathParam("id") String id, @PathParam("cf") String cf, String buonoJson) {
         if (id == null || id.isEmpty() || buonoJson == null || buonoJson.isEmpty()) {
             return Response.status(Status.BAD_REQUEST)
                     .entity("Buono ID and data cannot be null or empty")
@@ -200,6 +220,10 @@ public class BuonoResource {
                         .entity(e.getMessage())
                         .build();
             }
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
+                    .build();
         }
     }
 }

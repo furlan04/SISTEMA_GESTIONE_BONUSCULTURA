@@ -4,6 +4,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.core.Response.Status;
+
+import java.io.IOException;
+
 import it.unimib.sd2025.Model.SaldoRimasto;
 import it.unimib.sd2025.Model.Utente;
 import it.unimib.sd2025.Repository.UtenteRepository;
@@ -22,6 +25,10 @@ public class UtenteResource {
             Utente utente = userRepository.get(cf);
             
             return Response.ok(jsonb.toJson(utente)).build();
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
+                    .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity(e.getMessage())
@@ -43,6 +50,10 @@ public class UtenteResource {
             return Response.status(Status.CREATED)
                     .entity(jsonb.toJson(responseUser))
                     .build();
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
+                    .build();
         } catch (Exception e) {
             return Response.status(Status.BAD_REQUEST)
                     .entity(e.getMessage())
@@ -58,6 +69,10 @@ public class UtenteResource {
             UtenteRepository userRepository = new UtenteRepository(dbConnection);
             SaldoRimasto saldoRimasto = userRepository.getSaldoRimastoUtente(cf);
             return Response.ok(jsonb.toJson(saldoRimasto))
+                    .build();
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
                     .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)

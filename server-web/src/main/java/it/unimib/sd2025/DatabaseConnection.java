@@ -13,15 +13,10 @@ public class DatabaseConnection implements AutoCloseable {
     private PrintWriter out;
     private BufferedReader in;
 
-    public DatabaseConnection() {
-        try {
-            this.socket = new Socket(DB_HOST, DB_PORT);
-            this.out = new PrintWriter(socket.getOutputStream(), true);
-            this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        } catch (IOException e) {
-            System.err.println("ERROR: Unable to connect to the database at " + DB_HOST + ":" + DB_PORT);
-            e.printStackTrace();
-        }
+    public DatabaseConnection() throws IOException {
+        this.socket = new Socket(DB_HOST, DB_PORT);
+        this.out = new PrintWriter(socket.getOutputStream(), true);
+        this.in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
     }
 
     public String sendDatabaseCommand(String command) throws IOException {

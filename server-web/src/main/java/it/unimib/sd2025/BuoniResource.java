@@ -1,5 +1,7 @@
 package it.unimib.sd2025;
 
+import java.io.IOException;
+
 import it.unimib.sd2025.Model.Buono;
 import it.unimib.sd2025.Repository.BuonoRepository;
 import it.unimib.sd2025.Repository.UtenteRepository;
@@ -39,6 +41,10 @@ public class BuoniResource {
             }
 
             return Response.ok(JsonbBuilder.create().toJson(buoniList)).build();
+        } catch (IOException e) {
+            return Response.status(Status.INTERNAL_SERVER_ERROR)
+                    .entity("Database connection error: " + e.getMessage())
+                    .build();
         } catch (Exception e) {
             return Response.status(Status.NOT_FOUND)
                     .entity(e.getMessage())
